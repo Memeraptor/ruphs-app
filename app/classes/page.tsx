@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface Race {
   id: string;
@@ -33,6 +34,7 @@ interface PlayerClass {
 }
 
 export default function ClassesPage() {
+  const router = useRouter();
   const [classes, setClasses] = useState<PlayerClass[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -147,10 +149,34 @@ export default function ClassesPage() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-center mb-2">Player Classes</h1>
-        <p className="text-center text-base-content/70">
-          Discover all available player classes and their details
-        </p>
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex-1">
+            <h1 className="text-4xl font-bold mb-2">Player Classes</h1>
+            <p className="text-base-content/70">
+              Discover all available player classes and their details
+            </p>
+          </div>
+          <button
+            className="btn btn-primary btn-lg gap-2"
+            onClick={() => router.push("/classes/new")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Create New Class
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
