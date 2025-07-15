@@ -107,19 +107,21 @@ export default function RaceClassesViewPage() {
     setFactions(uniqueFactions);
   };
 
-  const filteredData = Object.values(groupedData).filter((group) => {
-    const matchesSearch =
-      group.race.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      group.classes.some((cls: Class) =>
-        cls.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  const filteredData = Object.values(groupedData)
+    .filter((group) => {
+      const matchesSearch =
+        group.race.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        group.classes.some((cls: Class) =>
+          cls.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
-    const matchesFaction =
-      !selectedFaction ||
-      (group.race.faction && group.race.faction.name === selectedFaction);
+      const matchesFaction =
+        !selectedFaction ||
+        (group.race.faction && group.race.faction.name === selectedFaction);
 
-    return matchesSearch && matchesFaction;
-  });
+      return matchesSearch && matchesFaction;
+    })
+    .sort((a, b) => a.race.name.localeCompare(b.race.name));
 
   const handleDeleteRaceClass = async (raceId: number, classId: number) => {
     if (
@@ -224,11 +226,34 @@ export default function RaceClassesViewPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-base-content mb-2">
-            Race-Class Relationships
-          </h1>
-          <div className="text-base-content/70">
-            Manage and view race-class associations in your system
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-base-content mb-2">
+                Race-Class Relationships
+              </h1>
+              <div className="text-base-content/70">
+                Manage and view race-class associations in your system
+              </div>
+            </div>
+            <div>
+              <a href="/race-classes/new" className="btn btn-primary">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                New Association
+              </a>
+            </div>
           </div>
         </div>
 
