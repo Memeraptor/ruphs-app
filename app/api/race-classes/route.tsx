@@ -67,11 +67,7 @@ export async function GET(request: NextRequest) {
       orderBy: [{ race: { name: "asc" } }, { class: { name: "asc" } }],
     });
 
-    return NextResponse.json({
-      success: true,
-      data: raceClasses,
-      count: raceClasses.length,
-    });
+    return NextResponse.json(raceClasses);
   } catch (error) {
     console.error("Error fetching race-class relationships:", error);
     return NextResponse.json(

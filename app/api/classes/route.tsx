@@ -30,11 +30,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      data: classes,
-      count: classes.length,
-    });
+    return NextResponse.json(classes);
   } catch (error) {
     console.error("Error fetching classes:", error);
     return NextResponse.json(
