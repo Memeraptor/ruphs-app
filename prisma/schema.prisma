@@ -14,3 +14,91 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Faction {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  
+  // Relations
+  races       Race[]
+  
+  @@map("factions")
+}
+
+model Race {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  slug        String      @unique
+  
+  // Foreign keys
+  factionId   Int
+  
+  // Relations
+  faction     Faction     @relation(fields: [factionId], references: [id])
+  classes     RaceClass[] // Many-to-many through RaceClass
+  characters  Character[]
+  
+  @@map("races")
+}
+
+model Class {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  slug            String           @unique
+  armorType       String           @default("")
+  colorCode       String           @default("")
+  
+  // Relations
+  races           RaceClass[]      // Many-to-many through RaceClass
+  specializations Specialization[]
+  
+  @@map("classes")
+}
+
+// Junction table for Race-Class many-to-many relationship
+model RaceClass {
+  id      Int @id @default(autoincrement())
+  raceId  Int
+  classId Int
+  
+  // Relations
+  race    Race  @relation(fields: [raceId], references: [id])
+  class   Class @relation(fields: [classId], references: [id])
+  
+  @@unique([raceId, classId])
+  @@map("race_classes")
+}
+
+model Specialization {
+  id         Int         @id @default(autoincrement())
+  name       String
+  slug       String
+  
+  // Foreign keys
+  classId    Int
+  
+  // Relations
+  class      Class       @relation(fields: [classId], references: [id])
+  characters Character[]
+  
+  @@unique([classId, name])
+  @@unique([classId, slug])
+  @@map("specializations")
+}
+
+model Character {
+  id               Int            @id @default(autoincrement())
+  name             String         @unique
+  level            Int            @default(1)
+  gender           String         // "male" or "female"
+  note             String         @default("")
+  
+  // Foreign keys
+  raceId           Int
+  specializationId Int
+  
+  // Relations
+  race             Race           @relation(fields: [raceId], references: [id])
+  specialization   Specialization @relation(fields: [specializationId], references: [id])
+  
+  @@map("characters")
+}

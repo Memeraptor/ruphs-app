@@ -1,0 +1,61 @@
+export const raceImages = {
+  bloodElf:
+    "https://warcraft.wiki.gg/images/0/0d/Ui-charactercreate-races_bloodelf-female-alternate.png?608031",
+  darkIronDwarf:
+    "https://warcraft.wiki.gg/images/1/11/Charactercreate-races_darkirondwarf-male.png?b55048=&format=original",
+  dracthyrAlliance:
+    "https://warcraft.wiki.gg/images/5/50/Charactercreate-races_dracthyr-visage-female.png?5a4724=&format=original",
+  dracthyrHorde:
+    "https://warcraft.wiki.gg/images/d/da/Charactercreate-races_dracthyr-female.png?5c6f10=&format=original",
+  draenei:
+    "https://warcraft.wiki.gg/images/6/61/Charactercreate-races_draenei-female.png?5e5729=&format=original",
+  dwarf:
+    "https://warcraft.wiki.gg/images/a/a3/Charactercreate-races_dwarf-male.png?eaf3d5=&format=original",
+  earthenAlliance:
+    "https://at-cdn-s03.audiotool.com/2022/04/18/documents/58aono1l/0/cover512x512-4842bc28a5c04b09833191e2b039f0ec.jpg",
+  earthenHorde:
+    "https://at-cdn-s03.audiotool.com/2022/04/18/documents/58aono1l/0/cover512x512-4842bc28a5c04b09833191e2b039f0ec.jpg",
+  gnome:
+    "https://warcraft.wiki.gg/images/a/a6/Charactercreate-races_gnome-female.png?6b9af0=&format=original",
+  goblin:
+    "https://warcraft.wiki.gg/images/9/91/Charactercreate-races_goblin-male.png?47c1b8=&format=original",
+  highmountainTauren:
+    "https://warcraft.wiki.gg/images/1/11/Charactercreate-races_darkirondwarf-male.png?b55048=&format=original",
+  human:
+    "https://warcraft.wiki.gg/images/7/7a/Charactercreate-races_human-female.png?492d9d=&format=original",
+  kulTiran:
+    "https://warcraft.wiki.gg/images/a/a1/Charactercreate-races_kultiranhuman-male.png?1949d7=&format=original",
+  lightforgedDraenei:
+    "https://warcraft.wiki.gg/images/9/9c/Charactercreate-races_lightforged-female.png?861c89=&format=original",
+  magharOrc:
+    "https://warcraft.wiki.gg/images/4/46/Charactercreate-races_maghar-male.png?6675f7=&format=original",
+  mechagnome:
+    "https://warcraft.wiki.gg/images/3/34/Charactercreate-races_mechagnome-male.png?79069a=&format=original",
+  nightElf:
+    "https://warcraft.wiki.gg/images/a/a7/Charactercreate-races_nightelf-female.png?ed002c=&format=original",
+  nightborne:
+    "https://warcraft.wiki.gg/images/0/08/Charactercreate-races_nightborne-female.png?5a4ad6=&format=original",
+  orc: "https://warcraft.wiki.gg/images/3/35/Ui-charactercreate-races_orc-male.png?9b9337",
+  pandaAlliance:
+    "https://warcraft.wiki.gg/images/8/8a/Charactercreate-races_panda-female.png?b2a605=&format=original",
+  pandaHorde:
+    "https://warcraft.wiki.gg/images/8/87/Charactercreate-races_panda-male.png?e76ea2=&format=original",
+  tauren:
+    "https://warcraft.wiki.gg/images/0/0f/Charactercreate-races_tauren-male.png?125c82=&format=original",
+  troll:
+    "https://warcraft.wiki.gg/images/f/f4/Charactercreate-races_troll-female.png?8ad6a7=&format=original",
+  undead:
+    "https://warcraft.wiki.gg/images/d/dd/Charactercreate-races_undead-female.png?b60e8e=&format=original",
+  voidElf:
+    "https://warcraft.wiki.gg/images/c/c2/Charactercreate-races_voidelf-female.png?78256b=&format=original",
+  vulpera:
+    "https://warcraft.wiki.gg/images/2/2e/Charactercreate-races_vulpera-female.png?82d85c=&format=original",
+  worgen:
+    "https://warcraft.wiki.gg/images/e/e9/Charactercreate-races_worgen-male2.png?c16387=&format=original",
+  zandalariTroll:
+    "https://warcraft.wiki.gg/images/8/89/Charactercreate-races_ZandalariTroll-male.png?1573de=&format=original",
+};
+
+export const classMap = {};
+
+export const specMap = {};
