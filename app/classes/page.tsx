@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { classMap } from "@/services/imageMaps";
 
 interface Race {
   id: string;
@@ -110,6 +111,10 @@ export default function ClassesPage() {
       default:
         return "badge-ghost";
     }
+  };
+
+  const getClassImage = (slug: string): string | null => {
+    return classMap[slug] || null;
   };
 
   if (loading) {
@@ -241,87 +246,105 @@ export default function ClassesPage() {
 
       {/* Classes Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {classes.map((playerClass) => (
-          <div
-            key={playerClass.id}
-            className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow"
-          >
-            <div className="card-body">
-              {/* Class Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="card-title text-xl">
-                  <span className="text-2xl mr-2">
-                    {getArmorTypeIcon(playerClass.armorType)}
-                  </span>
-                  {playerClass.name}
-                </h2>
-                <div
-                  className="w-4 h-4 rounded-full border-2 border-base-content/20"
-                  style={{ backgroundColor: playerClass.colorCode }}
-                  title={`Color: ${playerClass.colorCode}`}
-                ></div>
-              </div>
+        {classes.map((playerClass) => {
+          const classImage = getClassImage(playerClass.slug);
 
-              {/* Armor Type Badge */}
-              <div className="mb-4">
+          return (
+            <div
+              key={playerClass.id}
+              className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden group relative"
+            >
+              {/* Background Image */}
+              {classImage && (
                 <div
-                  className={`badge ${getArmorTypeBadgeColor(
-                    playerClass.armorType
-                  )} gap-2`}
-                >
-                  {playerClass.armorType}
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 group-hover:opacity-30 transition-opacity duration-300"
+                  style={{ backgroundImage: `url(${classImage})` }}
+                />
+              )}
+
+              {/* Gradient overlay for better text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-base-100/90 via-transparent to-transparent" />
+
+              {/* Card Content */}
+              <div className="card-body relative z-10">
+                {/* Class Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="card-title text-xl">
+                    <span className="text-2xl mr-2">
+                      {getArmorTypeIcon(playerClass.armorType)}
+                    </span>
+                    {playerClass.name}
+                  </h2>
+                  <div
+                    className="w-4 h-4 rounded-full border-2 border-base-content/20 shadow-lg"
+                    style={{ backgroundColor: playerClass.colorCode }}
+                    title={`Color: ${playerClass.colorCode}`}
+                  ></div>
+                </div>
+
+                {/* Armor Type Badge */}
+                <div className="mb-4">
+                  <div
+                    className={`badge ${getArmorTypeBadgeColor(
+                      playerClass.armorType
+                    )} gap-2`}
+                  >
+                    {playerClass.armorType}
+                  </div>
+                </div>
+
+                {/* Races */}
+                {filters.includeRaces &&
+                  playerClass.races &&
+                  playerClass.races.length > 0 && (
+                    <div className="mb-4">
+                      <h3 className="font-semibold text-sm mb-2">
+                        Available Races:
+                      </h3>
+                      <div className="flex flex-wrap gap-1">
+                        {playerClass.races.map((classRace) => (
+                          <div
+                            key={classRace.id}
+                            className="badge badge-outline badge-sm"
+                          >
+                            {classRace.race.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                {/* Specializations */}
+                {filters.includeSpecializations &&
+                  playerClass.specializations &&
+                  playerClass.specializations.length > 0 && (
+                    <div className="mb-4">
+                      <h3 className="font-semibold text-sm mb-2">
+                        Specializations:
+                      </h3>
+                      <div className="flex flex-wrap gap-1">
+                        {playerClass.specializations.map((spec) => (
+                          <div
+                            key={spec.id}
+                            className="badge badge-secondary badge-sm"
+                          >
+                            {spec.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                {/* Actions */}
+                <div className="card-actions justify-end mt-4">
+                  <button className="btn btn-primary btn-sm">
+                    View Details
+                  </button>
                 </div>
               </div>
-
-              {/* Races */}
-              {filters.includeRaces &&
-                playerClass.races &&
-                playerClass.races.length > 0 && (
-                  <div className="mb-4">
-                    <h3 className="font-semibold text-sm mb-2">
-                      Available Races:
-                    </h3>
-                    <div className="flex flex-wrap gap-1">
-                      {playerClass.races.map((classRace) => (
-                        <div
-                          key={classRace.id}
-                          className="badge badge-outline badge-sm"
-                        >
-                          {classRace.race.name}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-              {/* Specializations */}
-              {filters.includeSpecializations &&
-                playerClass.specializations &&
-                playerClass.specializations.length > 0 && (
-                  <div className="mb-4">
-                    <h3 className="font-semibold text-sm mb-2">
-                      Specializations:
-                    </h3>
-                    <div className="flex flex-wrap gap-1">
-                      {playerClass.specializations.map((spec) => (
-                        <div
-                          key={spec.id}
-                          className="badge badge-secondary badge-sm"
-                        >
-                          {spec.name}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-              {/* Actions */}
-              <div className="card-actions justify-end mt-4">
-                <button className="btn btn-primary btn-sm">View Details</button>
-              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Empty State */}

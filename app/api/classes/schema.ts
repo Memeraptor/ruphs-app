@@ -13,8 +13,8 @@ export const classSchema = z.object({
     .min(1, "Class slug is required")
     .max(255, "Class slug must be less than 255 characters")
     .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      "Slug must be lowercase letters, numbers, and hyphens only"
+      /^[a-z][a-zA-Z0-9]*$/,
+      "Slug must be in camelCase format (start with lowercase letter, followed by letters and numbers only)"
     )
     .trim(),
 
@@ -49,8 +49,8 @@ export const classUpdateSchema = z.object({
     .min(1, "Class slug is required")
     .max(255, "Class slug must be less than 255 characters")
     .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      "Slug must be lowercase letters, numbers, and hyphens only"
+      /^[a-z][a-zA-Z0-9]*$/,
+      "Slug must be in camelCase format (start with lowercase letter, followed by letters and numbers only)"
     )
     .trim()
     .optional(),
