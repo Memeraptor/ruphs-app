@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { raceClassSchema } from "./schema";
+import { z } from "zod";
 
 const prisma = new PrismaClient();
+
+// Schema for bulk creation
+const bulkRaceClassSchema = z.object({
+  raceId: z.number().int().positive(),
+  classIds: z
+    .array(z.number().int().positive())
+    .min(1, "At least one class must be selected"),
+});
 
 // GET /api/race-classes - Get all race-class relationships
 export async function GET(request: NextRequest) {
@@ -85,6 +94,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+
+    // Check if this is a bulk operation
+    if (body.classIds && Array.isArray(body.classIds)) {
+      return handleBulkCreate(body);
+    }
 
     // Validate the request body using Zod schema
     const validatedData = raceClassSchema.parse(body);
@@ -196,6 +210,153 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         error: "Failed to create race-class relationship",
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// Helper function to handle bulk creation
+async function handleBulkCreate(body: any) {
+  try {
+    // Validate the request body using bulk schema
+    const validatedData = bulkRaceClassSchema.parse(body);
+
+    // Verify that the race exists
+    const race = await prisma.race.findUnique({
+      where: { id: validatedData.raceId },
+    });
+
+    if (!race) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid race",
+          message: "The specified race does not exist",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Verify that all classes exist
+    const classes = await prisma.class.findMany({
+      where: {
+        id: {
+          in: validatedData.classIds,
+        },
+      },
+    });
+
+    if (classes.length !== validatedData.classIds.length) {
+      const foundClassIds = classes.map((c) => c.id);
+      const missingClassIds = validatedData.classIds.filter(
+        (id) => !foundClassIds.includes(id)
+      );
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid classes",
+          message: `The following class IDs do not exist: ${missingClassIds.join(
+            ", "
+          )}`,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Check for existing relationships
+    const existingRaceClasses = await prisma.raceClass.findMany({
+      where: {
+        raceId: validatedData.raceId,
+        classId: {
+          in: validatedData.classIds,
+        },
+      },
+    });
+
+    const existingClassIds = existingRaceClasses.map((rc) => rc.classId);
+    const newClassIds = validatedData.classIds.filter(
+      (id) => !existingClassIds.includes(id)
+    );
+
+    if (newClassIds.length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "All relationships already exist",
+          message: "All specified race-class relationships already exist",
+        },
+        { status: 409 }
+      );
+    }
+
+    // Create new race-class relationships
+    const createData = newClassIds.map((classId) => ({
+      raceId: validatedData.raceId,
+      classId: classId,
+    }));
+
+    const newRaceClasses = await prisma.raceClass.createMany({
+      data: createData,
+      skipDuplicates: true,
+    });
+
+    // Fetch the created relationships with includes
+    const createdRaceClasses = await prisma.raceClass.findMany({
+      where: {
+        raceId: validatedData.raceId,
+        classId: {
+          in: newClassIds,
+        },
+      },
+      include: {
+        race: {
+          include: {
+            faction: true,
+          },
+        },
+        class: true,
+      },
+    });
+
+    const result = {
+      success: true,
+      data: createdRaceClasses,
+      message: `Successfully created ${newRaceClasses.count} race-class relationships`,
+      stats: {
+        created: newRaceClasses.count,
+        skipped: existingClassIds.length,
+        total: validatedData.classIds.length,
+      },
+    };
+
+    if (existingClassIds.length > 0) {
+      result.message += ` (${existingClassIds.length} relationships were skipped as they already existed)`;
+    }
+
+    return NextResponse.json(result, { status: 201 });
+  } catch (error) {
+    console.error("Error creating bulk race-class relationships:", error);
+
+    // Handle Zod validation errors
+    if (error instanceof Error && error.name === "ZodError") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Validation error",
+          message: "Invalid input data",
+          details: error.message,
+        },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Failed to create bulk race-class relationships",
         message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }

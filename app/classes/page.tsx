@@ -157,9 +157,7 @@ export default function ClassesPage() {
         <div className="flex justify-between items-center mb-4">
           <div className="flex-1">
             <h1 className="text-4xl font-bold mb-2">Player Classes</h1>
-            <p className="text-base-content/70">
-              Discover all available player classes and their details
-            </p>
+            <p className="text-base-content/70">Manage your classes</p>
           </div>
           <button
             className="btn btn-primary btn-lg gap-2"
