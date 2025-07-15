@@ -22,14 +22,20 @@ export default function NewClassPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Generate slug from name
+  // Generate camelCase slug from name
   const generateSlug = (name: string) => {
     return name
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .trim();
+      .replace(/[^a-zA-Z0-9\s]/g, "") // Remove special characters
+      .split(/\s+/) // Split by whitespace
+      .filter((word) => word.length > 0) // Remove empty strings
+      .map((word, index) => {
+        // First word lowercase, subsequent words capitalize first letter
+        if (index === 0) {
+          return word.toLowerCase();
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join("");
   };
 
   const handleNameChange = (name: string) => {
@@ -200,7 +206,7 @@ export default function NewClassPage() {
               </label>
               <input
                 type="text"
-                placeholder="class-slug"
+                placeholder="classSlug"
                 className="input input-bordered w-full"
                 value={formData.slug}
                 onChange={(e) =>
