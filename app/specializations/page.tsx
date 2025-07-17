@@ -44,7 +44,7 @@ export default function SpecializationPage() {
     const fetchSpecializations = async () => {
       try {
         setLoading(true);
-        const response = await fetch("/api/specialization");
+        const response = await fetch("/api/specializations");
         if (!response.ok) {
           throw new Error("Failed to fetch specializations");
         }
@@ -104,7 +104,7 @@ export default function SpecializationPage() {
     .filter(Boolean) as Class[];
 
   const handleNewSpecialization = () => {
-    router.push("/specialization/new");
+    router.push("/specializations/new");
   };
 
   if (loading) {
@@ -236,114 +236,93 @@ export default function SpecializationPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {Object.entries(groupedSpecializations).map(
               ([className, group]) => (
-                <div key={className} className="space-y-4">
-                  {/* Class Header */}
-                  <div className="flex items-center gap-4">
+                <div
+                  key={className}
+                  className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                >
+                  {/* Class Background Image */}
+                  <div
+                    className="h-48 bg-gradient-to-br from-base-300 to-base-200 relative overflow-hidden"
+                    style={{
+                      backgroundImage: classMap[group.class.slug]
+                        ? `url(${classMap[group.class.slug]})`
+                        : "none",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    {/* Overlay */}
                     <div
-                      className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg"
+                      className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
                       style={{
-                        backgroundColor: group.class.colorCode || "#6B7280",
+                        background: group.class.colorCode
+                          ? `linear-gradient(to top, ${group.class.colorCode}88, transparent)`
+                          : "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
                       }}
-                    >
-                      {className.charAt(0).toUpperCase()}
+                    />
+
+                    {/* Class Icon */}
+                    <div className="absolute top-4 left-4">
+                      <div
+                        className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg"
+                        style={{
+                          backgroundColor: group.class.colorCode || "#6B7280",
+                        }}
+                      >
+                        {className.charAt(0).toUpperCase()}
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-base-content">
+
+                    {/* Armor Type Badge */}
+                    {group.class.armorType && (
+                      <div className="absolute top-4 right-4">
+                        <div className="badge badge-ghost bg-black/20 text-white border-none">
+                          {group.class.armorType}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Class Title */}
+                    <div className="absolute bottom-4 left-4">
+                      <h2 className="text-2xl font-bold text-white">
                         {className}
                       </h2>
-                      <p className="text-base-content/70">
+                      <p className="text-white/80 text-sm">
                         {group.specializations.length} specialization
                         {group.specializations.length !== 1 ? "s" : ""}
-                        {group.class.armorType && (
-                          <span className="ml-2 badge badge-outline">
-                            {group.class.armorType}
-                          </span>
-                        )}
                       </p>
                     </div>
                   </div>
 
-                  {/* Specializations Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {group.specializations.map((specialization) => (
-                      <div
-                        key={specialization.id}
-                        className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-                      >
-                        {/* Background Image */}
+                  {/* Specializations List */}
+                  <div className="card-body p-6">
+                    <div className="flex flex-wrap justify-evenly gap-3">
+                      {group.specializations.map((specialization) => (
                         <div
-                          className="h-48 bg-gradient-to-br from-base-300 to-base-200 relative overflow-hidden"
-                          style={{
-                            backgroundImage: classMap[group.class.slug]
-                              ? `url(${classMap[group.class.slug]})`
-                              : "none",
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }}
+                          key={specialization.id}
+                          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-base-200 hover:bg-base-300 transition-colors duration-200 flex-shrink-0"
                         >
-                          {/* Overlay */}
                           <div
-                            className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+                            className="w-2 h-2 rounded-full flex-shrink-0"
                             style={{
-                              background: group.class.colorCode
-                                ? `linear-gradient(to top, ${group.class.colorCode}88, transparent)`
-                                : "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
+                              backgroundColor:
+                                group.class.colorCode || "#6B7280",
                             }}
                           />
-
-                          {/* Class Badge */}
-                          <div className="absolute top-4 left-4">
-                            <div
-                              className="badge text-white border-none font-medium"
-                              style={{
-                                backgroundColor:
-                                  group.class.colorCode || "#6B7280",
-                                color: "white",
-                              }}
-                            >
-                              {group.class.name}
-                            </div>
-                          </div>
-
-                          {/* Armor Type Badge */}
-                          {group.class.armorType && (
-                            <div className="absolute top-4 right-4">
-                              <div className="badge badge-ghost bg-black/20 text-white border-none">
-                                {group.class.armorType}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Card Content */}
-                        <div className="card-body p-6">
-                          <h3 className="card-title text-lg mb-2">
-                            {specialization.name}
-                          </h3>
-
-                          {/* Specialization slug as subtitle */}
-                          <p className="text-base-content/50 text-sm mb-4">
-                            {specialization.slug}
-                          </p>
-
-                          <div className="card-actions justify-end">
-                            <button
-                              className="btn btn-primary btn-sm"
-                              style={{
-                                backgroundColor:
-                                  group.class.colorCode || "#6B7280",
-                                borderColor: group.class.colorCode || "#6B7280",
-                              }}
-                            >
-                              View Details
-                            </button>
+                          <div>
+                            <h3 className="font-semibold text-sm text-base-content">
+                              {specialization.name}
+                            </h3>
+                            <p className="text-base-content/50 text-xs">
+                              {specialization.slug}
+                            </p>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
               )

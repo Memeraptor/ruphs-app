@@ -261,7 +261,16 @@ export default function ClassesPage() {
               )}
 
               {/* Gradient overlay for better text readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-base-100/90 via-transparent to-transparent" />
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-base-100/90 via-transparent to-transparent" /> */}
+
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+                style={{
+                  background: playerClass.colorCode
+                    ? `linear-gradient(to top, ${playerClass.colorCode}33, transparent)`
+                    : "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
+                }}
+              />
 
               {/* Card Content */}
               <div className="card-body relative z-10">
