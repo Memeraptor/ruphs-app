@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { classMap } from "../../services/imageMaps";
+import Link from "next/link";
 
 // Types based on your Prisma schema
 interface Class {
@@ -267,7 +268,7 @@ export default function SpecializationPage() {
                     {/* Class Icon */}
                     <div className="absolute top-4 left-4">
                       <div
-                        className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg"
+                        className="w-12 h-12 rounded-lg flex items-center justify-center text-gray-800 font-bold text-xl shadow-lg"
                         style={{
                           backgroundColor: group.class.colorCode || "#6B7280",
                         }}
@@ -312,14 +313,14 @@ export default function SpecializationPage() {
                                 group.class.colorCode || "#6B7280",
                             }}
                           />
-                          <div>
+                          <Link href={`/specializations/${specialization.id}`}>
                             <h3 className="font-semibold text-sm text-base-content">
                               {specialization.name}
                             </h3>
                             <p className="text-base-content/50 text-xs">
                               {specialization.slug}
                             </p>
-                          </div>
+                          </Link>
                         </div>
                       ))}
                     </div>
