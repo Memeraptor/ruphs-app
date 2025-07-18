@@ -6,6 +6,7 @@ import Race from "@/services/Interfaces/Race";
 import Faction from "@/services/Interfaces/Faction";
 import Class from "@/services/Interfaces/Class";
 import RaceClass from "@/services/Interfaces/RaceClass";
+import RacePortrait from "../components/RacePortrait";
 
 interface GroupedRaceClasses {
   [raceId: number]: {
@@ -329,22 +330,8 @@ export default function RaceClassesViewPage() {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       {/* Race Portrait */}
-                      <div className="avatar">
-                        <div
-                          className={`w-12 h-12 rounded-full ${getFactionAvatarBorder(
-                            group.race.faction
-                          )}`}
-                        >
-                          <img
-                            src={
-                              raceImages[group.race.slug] ||
-                              "/placeholder-race.jpg"
-                            }
-                            alt={group.race.name}
-                            className="w-full h-full object-cover rounded-full"
-                          />
-                        </div>
-                      </div>
+                      <RacePortrait race={group.race} />
+
                       <h2 className="card-title text-xl text-base-content">
                         {group.race.name}
                       </h2>
