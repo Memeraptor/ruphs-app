@@ -1,19 +1,9 @@
 "use client";
 
 import { raceImages } from "@/services/imageMaps";
+import Race from "@/services/Interfaces/Race";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-
-interface Race {
-  id: number;
-  name: string;
-  slug: string;
-  factionId: number;
-  faction: {
-    id: number;
-    name: string;
-  };
-}
+import { useEffect, useState } from "react";
 
 function RacesLoading() {
   return (

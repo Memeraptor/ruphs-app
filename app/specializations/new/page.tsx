@@ -2,14 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-interface Class {
-  id: number;
-  name: string;
-  slug: string;
-  armorType: string;
-  colorCode: string;
-}
+import Class from "@/services/Interfaces/Classes";
 
 interface SpecializationInput {
   name: string;

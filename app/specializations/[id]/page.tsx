@@ -3,25 +3,14 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { classMap } from "@/services/imageMaps";
-
-interface Race {
-  id: number;
-  name: string;
-  slug: string;
-}
+import Race from "@/services/Interfaces/Race";
+import Class from "@/services/Interfaces/Classes";
 
 interface Character {
   id: number;
   name: string;
   level: number;
   race: Race;
-}
-
-interface Class {
-  id: number;
-  name: string;
-  slug: string;
-  colorCode: string;
 }
 
 interface Specialization {

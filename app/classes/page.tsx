@@ -1,42 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { classMap } from "@/services/imageMaps";
-
-interface Race {
-  id: string;
-  name: string;
-  slug: string;
-}
-
-interface ClassRace {
-  id: string;
-  classId: string;
-  raceId: string;
-  race: Race;
-}
-
-interface Specialization {
-  id: string;
-  name: string;
-  slug: string;
-  classId: string;
-}
-
-interface PlayerClass {
-  id: string;
-  name: string;
-  slug: string;
-  armorType: string;
-  colorCode: string;
-  races?: ClassRace[];
-  specializations?: Specialization[];
-}
+import Class from "@/services/Interfaces/Classes";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ClassesPage() {
   const router = useRouter();
-  const [classes, setClasses] = useState<PlayerClass[]>([]);
+  const [classes, setClasses] = useState<Class[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState({

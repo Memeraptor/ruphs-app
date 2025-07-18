@@ -3,11 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-interface Faction {
-  id: number;
-  name: string;
-}
+import Faction from "@/services/Interfaces/Faction";
 
 interface FormData {
   name: string;

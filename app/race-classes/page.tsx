@@ -2,32 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { raceImages } from "@/services/imageMaps";
-
-interface Faction {
-  id: number;
-  name: string;
-}
-
-interface Race {
-  id: number;
-  name: string;
-  slug: string;
-  faction?: Faction;
-}
-
-interface Class {
-  id: number;
-  name: string;
-  colorCode: string;
-}
-
-interface RaceClass {
-  id: number;
-  raceId: number;
-  classId: number;
-  race: Race;
-  class: Class;
-}
+import Race from "@/services/Interfaces/Race";
+import Faction from "@/services/Interfaces/Faction";
+import Class from "@/services/Interfaces/Classes";
+import RaceClass from "@/services/Interfaces/RaceClass";
 
 interface GroupedRaceClasses {
   [raceId: number]: {

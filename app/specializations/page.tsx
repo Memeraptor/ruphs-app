@@ -4,23 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { classMap } from "../../services/imageMaps";
 import Link from "next/link";
-
-// Types based on your Prisma schema
-interface Class {
-  id: number;
-  name: string;
-  slug: string;
-  armorType: string;
-  colorCode: string;
-}
-
-interface Specialization {
-  id: number;
-  name: string;
-  slug: string;
-  classId: number;
-  class: Class;
-}
+import Class from "@/services/Interfaces/Classes";
+import Specialization from "@/services/Interfaces/Specialization";
 
 interface GroupedSpecializations {
   [className: string]: {

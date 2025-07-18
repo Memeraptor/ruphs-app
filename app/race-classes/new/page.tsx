@@ -2,21 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-interface Race {
-  id: number;
-  name: string;
-  faction?: {
-    id: number;
-    name: string;
-  };
-}
-
-interface Class {
-  id: number;
-  name: string;
-  colorCode: string;
-}
+import Race from "@/services/Interfaces/Race";
+import Class from "@/services/Interfaces/Classes";
 
 interface BulkRaceClassFormProps {
   onSuccess?: (data: any) => void;
