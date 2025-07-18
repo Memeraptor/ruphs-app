@@ -3,24 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { classMap } from "@/services/imageMaps";
-import Race from "@/services/Interfaces/Race";
-import Class from "@/services/Interfaces/Classes";
-
-interface Character {
-  id: number;
-  name: string;
-  level: number;
-  race: Race;
-}
-
-interface Specialization {
-  id: number;
-  name: string;
-  slug: string;
-  classId: number;
-  class: Class;
-  characters: Character[];
-}
+import Specialization from "@/services/Interfaces/Specialization";
 
 interface EditFormData {
   name: string;
@@ -208,14 +191,13 @@ export default function SpecializationPage() {
               </h1>
               <div className="flex items-center gap-3">
                 <div
-                  className="badge badge-lg text-gray-700 font-medium"
+                  className="badge badge-lg text-white font-medium"
                   style={{ backgroundColor: specialization.class.colorCode }}
                 >
                   {specialization.class.name}
                 </div>
                 <div className="text-sm text-base-content/60">
-                  {specialization.characters.length} character
-                  {specialization.characters.length !== 1 ? "s" : ""}
+                  ID: {specialization.id}
                 </div>
               </div>
             </div>
@@ -271,7 +253,7 @@ export default function SpecializationPage() {
                 </>
               ) : (
                 <button
-                  className="btn text-gray-700"
+                  className="btn text-white"
                   style={{ backgroundColor: specialization.class.colorCode }}
                   onClick={handleEdit}
                 >
@@ -296,7 +278,7 @@ export default function SpecializationPage() {
           </div>
 
           {/* Main Content Card */}
-          <div className="card bg-base-100 shadow-xl mb-8">
+          <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title text-2xl mb-6">
                 Specialization Details
@@ -362,7 +344,7 @@ export default function SpecializationPage() {
                         {specialization.class.name}
                       </div>
                       <div
-                        className="badge badge-sm text-gray-700"
+                        className="badge badge-sm text-white"
                         style={{
                           backgroundColor: specialization.class.colorCode,
                         }}
@@ -373,58 +355,6 @@ export default function SpecializationPage() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Characters Section */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title text-2xl mb-6">
-                Characters ({specialization.characters.length})
-              </h2>
-
-              {specialization.characters.length === 0 ? (
-                <div className="text-center py-8 text-base-content/60">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-16 w-16 mx-auto mb-4 opacity-50"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  <p>No characters using this specialization yet.</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {specialization.characters.map((character) => (
-                    <div
-                      key={character.id}
-                      className="card bg-base-200 shadow-sm"
-                    >
-                      <div className="card-body p-4">
-                        <h3 className="font-semibold text-lg">
-                          {character.name}
-                        </h3>
-                        <div className="flex justify-between items-center mt-2">
-                          <div className="badge badge-outline">
-                            Level {character.level}
-                          </div>
-                          <div className="badge badge-secondary">
-                            {character.race.name}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         </div>

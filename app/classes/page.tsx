@@ -131,7 +131,7 @@ export default function ClassesPage() {
             <p className="text-base-content/70">Manage your classes</p>
           </div>
           <button
-            className="btn btn-primary btn-lg gap-2"
+            className="btn btn-primary gap-2"
             onClick={() => router.push("/classes/new")}
           >
             <svg
