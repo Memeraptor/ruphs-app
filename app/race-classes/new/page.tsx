@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Race from "@/services/Interfaces/Race";
-import Class from "@/services/Interfaces/Classes";
+import Class from "@/services/Interfaces/Class";
 
 interface BulkRaceClassFormProps {
   onSuccess?: (data: any) => void;

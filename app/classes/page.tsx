@@ -1,7 +1,7 @@
 "use client";
 
 import { classMap } from "@/services/imageMaps";
-import Class from "@/services/Interfaces/Classes";
+import Class from "@/services/Interfaces/Class";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

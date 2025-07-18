@@ -1,4 +1,4 @@
-import Class from "./Classes";
+import Class from "./Class";
 
 export default interface Specialization {
   id: string;

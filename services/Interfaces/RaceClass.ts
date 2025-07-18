@@ -1,4 +1,4 @@
-import Class from "./Classes";
+import Class from "./Class";
 import Race from "./Race";
 
 export default interface RaceClass {

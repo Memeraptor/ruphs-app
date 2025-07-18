@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { raceImages } from "@/services/imageMaps";
 import Race from "@/services/Interfaces/Race";
 import Faction from "@/services/Interfaces/Faction";
-import Class from "@/services/Interfaces/Classes";
+import Class from "@/services/Interfaces/Class";
 import RaceClass from "@/services/Interfaces/RaceClass";
 
 interface GroupedRaceClasses {

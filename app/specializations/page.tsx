@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { classMap } from "../../services/imageMaps";
 import Link from "next/link";
-import Class from "@/services/Interfaces/Classes";
+import Class from "@/services/Interfaces/Class";
 import Specialization from "@/services/Interfaces/Specialization";
 
 interface GroupedSpecializations {
