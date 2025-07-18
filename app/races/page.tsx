@@ -117,7 +117,7 @@ function RacesList() {
           {races.map((race) => (
             <div
               key={race.id}
-              className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300"
+              className="card bg-base-100 shadow-xl  hover:shadow-2xl transition-all duration-300"
             >
               <div className="card-body">
                 <div className="flex justify-between items-start">
