@@ -5,7 +5,7 @@ import Faction from "@/services/Interfaces/Faction";
 import Race from "@/services/Interfaces/Race";
 import RaceClass from "@/services/Interfaces/RaceClass";
 import { useEffect, useState } from "react";
-import RacePortrait from "../components/RacePortrait";
+import RaceClassCard from "../components/RaceClassCard";
 
 interface GroupedRaceClasses {
   [raceId: number]: {
@@ -155,15 +155,6 @@ export default function RaceClassesViewPage() {
       (total, group) => total + group.classes.length,
       0
     );
-  };
-
-  const getFactionBadgeColor = (faction?: Faction): string => {
-    if (!faction) return "badge-secondary";
-    return faction.id === 1
-      ? "badge-info"
-      : faction.id === 2
-      ? "badge-error"
-      : "badge-secondary";
   };
 
   if (loading) {
@@ -362,95 +353,58 @@ export default function RaceClassesViewPage() {
         ) : (
           <div className="grid gap-4">
             {filteredData.map((group) => (
-              <div
+              <RaceClassCard
                 key={group.race.id}
-                className="card bg-base-100 shadow-md border border-base-300"
+                race={group.race}
+                classCount={group.classes.length}
               >
-                <div className="card-body">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      {/* Race Portrait */}
-                      <RacePortrait race={group.race} />
+                {group.classes.map((cls: Class) => {
+                  const deleteKey = `${group.race.id}-${cls.id}`;
+                  const isDeleting = deletingItems.has(deleteKey);
 
-                      <h2 className="card-title text-xl text-base-content">
-                        {group.race.name}
-                      </h2>
-                      {group.race.faction && (
-                        <div
-                          className={`badge ${getFactionBadgeColor(
-                            group.race.faction
-                          )}`}
-                        >
-                          {group.race.faction.name}
-                        </div>
-                      )}
-                    </div>
-                    <div className="badge badge-outline">
-                      {group.classes.length}{" "}
-                      {group.classes.length === 1 ? "class" : "classes"}
-                    </div>
-                  </div>
-
-                  <div className="divider my-2"></div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {group.classes.map((cls: Class) => {
-                      const deleteKey = `${group.race.id}-${cls.id}`;
-                      const isDeleting = deletingItems.has(deleteKey);
-
-                      return (
-                        <div
-                          key={cls.id}
-                          className="badge badge-lg gap-2 p-3 bg-base-100 border-2"
-                          style={{
-                            color: cls.colorCode,
-                            borderColor: cls.colorCode,
-                            backgroundColor: "var(--b1)",
-                          }}
-                        >
-                          <span>{cls.name}</span>
-                          <button
-                            className="btn btn-ghost btn-xs hover:text-error"
-                            style={{ color: cls.colorCode }}
-                            onClick={() =>
-                              handleDeleteRaceClass(group.race.id, cls.id)
-                            }
-                            disabled={isDeleting}
-                            title="Remove this class from race"
+                  return (
+                    <div
+                      key={cls.id}
+                      className="badge badge-lg gap-2 p-3 bg-base-100 border-2"
+                      style={{
+                        color: cls.colorCode,
+                        borderColor: cls.colorCode,
+                        backgroundColor: "var(--b1)",
+                      }}
+                    >
+                      <span>{cls.name}</span>
+                      <button
+                        className="btn btn-ghost btn-xs hover:text-error"
+                        style={{ color: cls.colorCode }}
+                        onClick={() =>
+                          handleDeleteRaceClass(group.race.id, cls.id)
+                        }
+                        disabled={isDeleting}
+                        title="Remove this class from race"
+                      >
+                        {isDeleting ? (
+                          <span className="loading loading-spinner loading-xs"></span>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
-                            {isDeleting ? (
-                              <span className="loading loading-spinner loading-xs"></span>
-                            ) : (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-3 w-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
-                            )}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {group.classes.length === 0 && (
-                    <div className="text-center py-4">
-                      <span className="text-base-content/50">
-                        No classes associated with this race
-                      </span>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        )}
+                      </button>
                     </div>
-                  )}
-                </div>
-              </div>
+                  );
+                })}
+              </RaceClassCard>
             ))}
           </div>
         )}
