@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { raceImages } from "@/services/imageMaps";
-import Race from "@/services/Interfaces/Race";
-import Faction from "@/services/Interfaces/Faction";
 import Class from "@/services/Interfaces/Class";
+import Faction from "@/services/Interfaces/Faction";
+import Race from "@/services/Interfaces/Race";
 import RaceClass from "@/services/Interfaces/RaceClass";
+import { useEffect, useState } from "react";
 import RacePortrait from "../components/RacePortrait";
-import ClassBadge from "../components/ClassBadge";
 
 interface GroupedRaceClasses {
   [raceId: number]: {
@@ -24,6 +22,7 @@ export default function RaceClassesViewPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFaction, setSelectedFaction] = useState<string>("");
   const [factions, setFactions] = useState<Faction[]>([]);
+  const [deletingItems, setDeletingItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetchRaceClasses();
@@ -35,6 +34,7 @@ export default function RaceClassesViewPage() {
 
   const fetchRaceClasses = async () => {
     setLoading(true);
+    setError(null); // Clear any previous errors
     try {
       const response = await fetch(
         "/api/race-classes?includeRace=true&includeClass=true"
@@ -110,21 +110,43 @@ export default function RaceClassesViewPage() {
       return;
     }
 
+    const deleteKey = `${raceId}-${classId}`;
+    setDeletingItems((prev) => new Set(prev).add(deleteKey));
+    setError(null); // Clear any previous errors
+
     try {
       const response = await fetch(`/api/race-classes/${raceId}/${classId}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete race-class relationship");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error ||
+            `Failed to delete race-class relationship (${response.status})`
+        );
       }
 
+      // Show success message (optional)
+      const result = await response.json();
+      console.log("Delete successful:", result.message);
+
       // Refresh the data
-      fetchRaceClasses();
+      await fetchRaceClasses();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to delete relationship"
-      );
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to delete relationship";
+      setError(errorMessage);
+      console.error("Delete error:", err);
+    } finally {
+      setDeletingItems((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(deleteKey);
+        return newSet;
+      });
     }
   };
 
@@ -142,15 +164,6 @@ export default function RaceClassesViewPage() {
       : faction.id === 2
       ? "badge-error"
       : "badge-secondary";
-  };
-
-  const getFactionAvatarBorder = (faction?: Faction): string => {
-    if (!faction) return "ring-2 ring-base-300";
-    return faction.id === 1
-      ? "ring-2 ring-info"
-      : faction.id === 2
-      ? "ring-2 ring-error"
-      : "ring-2 ring-base-300";
   };
 
   if (loading) {
@@ -306,6 +319,32 @@ export default function RaceClassesViewPage() {
           </div>
         </div>
 
+        {/* Error Alert (if not loading) */}
+        {error && !loading && (
+          <div className="alert alert-warning mb-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+              />
+            </svg>
+            <span>{error}</span>
+            <button
+              className="btn btn-sm btn-outline"
+              onClick={() => setError(null)}
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+
         {/* Race-Class Groups */}
         {filteredData.length === 0 ? (
           <div className="card bg-base-200 shadow-sm">
@@ -355,14 +394,52 @@ export default function RaceClassesViewPage() {
                   <div className="divider my-2"></div>
 
                   <div className="flex flex-wrap gap-2">
-                    {group.classes.map((cls: Class) => (
-                      <ClassBadge
-                        key={cls.id}
-                        propClass={cls}
-                        race={group.race}
-                        handleDelete={handleDeleteRaceClass}
-                      />
-                    ))}
+                    {group.classes.map((cls: Class) => {
+                      const deleteKey = `${group.race.id}-${cls.id}`;
+                      const isDeleting = deletingItems.has(deleteKey);
+
+                      return (
+                        <div
+                          key={cls.id}
+                          className="badge badge-lg gap-2 p-3 bg-base-100 border-2"
+                          style={{
+                            color: cls.colorCode,
+                            borderColor: cls.colorCode,
+                            backgroundColor: "var(--b1)",
+                          }}
+                        >
+                          <span>{cls.name}</span>
+                          <button
+                            className="btn btn-ghost btn-xs hover:text-error"
+                            style={{ color: cls.colorCode }}
+                            onClick={() =>
+                              handleDeleteRaceClass(group.race.id, cls.id)
+                            }
+                            disabled={isDeleting}
+                            title="Remove this class from race"
+                          >
+                            {isDeleting ? (
+                              <span className="loading loading-spinner loading-xs"></span>
+                            ) : (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-3 w-3"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            )}
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
 
                   {group.classes.length === 0 && (
