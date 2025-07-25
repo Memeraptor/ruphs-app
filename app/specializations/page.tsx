@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { classMap } from "../../services/imageMaps";
-import Link from "next/link";
 import Class from "@/services/Interfaces/Class";
 import Specialization from "@/services/Interfaces/Specialization";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import ClassSpecializationsCard from "../components/ClassSpecializationsCard";
 
 interface GroupedSpecializations {
   [className: string]: {
@@ -225,92 +224,12 @@ export default function SpecializationPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {Object.entries(groupedSpecializations).map(
               ([className, group]) => (
-                <div
+                <ClassSpecializationsCard
                   key={className}
-                  className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-                >
-                  {/* Class Background Image */}
-                  <div
-                    className="h-48 bg-gradient-to-br from-base-300 to-base-200 relative overflow-hidden"
-                    style={{
-                      backgroundImage: classMap[group.class.slug]
-                        ? `url(${classMap[group.class.slug]})`
-                        : "none",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  >
-                    {/* Overlay */}
-                    <div
-                      className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                      style={{
-                        background: group.class.colorCode
-                          ? `linear-gradient(to top, ${group.class.colorCode}88, transparent)`
-                          : "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
-                      }}
-                    />
-
-                    {/* Class Icon */}
-                    <div className="absolute top-4 left-4">
-                      <div
-                        className="w-12 h-12 rounded-lg flex items-center justify-center text-gray-800 font-bold text-xl shadow-lg"
-                        style={{
-                          backgroundColor: group.class.colorCode || "#6B7280",
-                        }}
-                      >
-                        {className.charAt(0).toUpperCase()}
-                      </div>
-                    </div>
-
-                    {/* Armor Type Badge */}
-                    {group.class.armorType && (
-                      <div className="absolute top-4 right-4">
-                        <div className="badge badge-ghost bg-black/20 text-white border-none">
-                          {group.class.armorType}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Class Title */}
-                    <div className="absolute bottom-4 left-4">
-                      <h2 className="text-2xl font-bold text-white">
-                        {className}
-                      </h2>
-                      <p className="text-white/80 text-sm">
-                        {group.specializations.length} specialization
-                        {group.specializations.length !== 1 ? "s" : ""}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Specializations List */}
-                  <div className="card-body p-6">
-                    <div className="flex flex-wrap justify-evenly gap-3">
-                      {group.specializations.map((specialization) => (
-                        <div
-                          key={specialization.id}
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-base-200 hover:bg-base-300 transition-colors duration-200 flex-shrink-0"
-                        >
-                          <div
-                            className="w-2 h-2 rounded-full flex-shrink-0"
-                            style={{
-                              backgroundColor:
-                                group.class.colorCode || "#6B7280",
-                            }}
-                          />
-                          <Link href={`/specializations/${specialization.id}`}>
-                            <h3 className="font-semibold text-sm text-base-content">
-                              {specialization.name}
-                            </h3>
-                            <p className="text-base-content/50 text-xs">
-                              {specialization.slug}
-                            </p>
-                          </Link>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                  className={className}
+                  classData={group.class}
+                  specializations={group.specializations}
+                />
               )
             )}
           </div>
