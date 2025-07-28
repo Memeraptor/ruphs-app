@@ -1,9 +1,9 @@
-import Race from "./Race";
-
 export default interface Character {
   id: number;
   name: string;
   level: number;
-  race: Race;
+  gender: string;
+  note: string;
+  raceId: number;
   specializationId: number;
 }
