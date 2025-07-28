@@ -68,7 +68,7 @@ export default function Navbar() {
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost text-xl">
-          MyApp
+          Fruit-Burglar App
         </Link>
       </div>
 
