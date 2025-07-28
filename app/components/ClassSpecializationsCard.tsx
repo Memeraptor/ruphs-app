@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { classMap } from "../../services/imageMaps";
+import { classMap } from "../../services/imageMaps/classIconMap";
 import Class from "@/services/Interfaces/Class";
 import Specialization from "@/services/Interfaces/Specialization";
 

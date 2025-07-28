@@ -1,6 +1,6 @@
 import Race from "@/services/Interfaces/Race";
 import React from "react";
-import { raceImages } from "@/services/imageMaps";
+import { raceImages } from "@/services/imageMaps/racePortraitMap";
 
 interface Props {
   race: Race;

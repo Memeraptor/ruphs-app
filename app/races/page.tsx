@@ -1,6 +1,5 @@
 "use client";
 
-import { raceImages } from "@/services/imageMaps";
 import Race from "@/services/Interfaces/Race";
 import Link from "next/link";
 import { useEffect, useState } from "react";

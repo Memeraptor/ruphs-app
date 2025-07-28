@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { classMap } from "@/services/imageMaps";
+import { classMap } from "@/services/imageMaps/classIconMap";
 import Specialization from "@/services/Interfaces/Specialization";
 
 interface EditFormData {
