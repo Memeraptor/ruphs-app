@@ -1,0 +1,76 @@
+export const specMap: Record<string, string> = {
+  blood:
+    "https://warcraft.wiki.gg/images/4/45/Spell_deathknight_bloodpresence.png?6e04e8",
+  frostDk:
+    "https://warcraft.wiki.gg/images/d/d0/Spell_deathknight_frostpresence.png?3b9381",
+  unholy:
+    "https://warcraft.wiki.gg/images/6/6f/Spell_deathknight_unholypresence.png?7f5cda",
+  affliction:
+    "https://warcraft.wiki.gg/images/e/ef/Spell_shadow_deathcoil.png?efc250",
+  demonology:
+    "https://warcraft.wiki.gg/images/d/dd/Spell_shadow_metamorphosis.png?93159e",
+  destruction:
+    "https://warcraft.wiki.gg/images/f/fc/Spell_shadow_rainoffire.png?ceefd6",
+  assAssIn:
+    "https://warcraft.wiki.gg/images/6/65/Ability_rogue_eviscerate.png?a23bc9",
+  outlaw: "https://warcraft.wiki.gg/images/d/df/Inv_sword_30.png?c6ae76",
+  subtlety: "https://warcraft.wiki.gg/images/f/f8/Ability_stealth.png?9e490d",
+  balance:
+    "https://warcraft.wiki.gg/images/1/14/Spell_nature_starfall.png?6bfb68",
+  feral:
+    "https://warcraft.wiki.gg/images/4/48/Ability_druid_catform.png?a8895e",
+  guardian:
+    "https://warcraft.wiki.gg/images/b/bb/Ability_racial_bearform.png?ef2632",
+  restorationDruid:
+    "https://warcraft.wiki.gg/images/3/37/Spell_nature_healingtouch.png?6ef21f",
+  augmentation:
+    "https://warcraft.wiki.gg/images/3/36/Classicon_evoker_augmentation.png?cccbac",
+  devastation:
+    "https://warcraft.wiki.gg/images/b/bf/Classicon_evoker_devastation.png?b0028b",
+  preservation:
+    "https://warcraft.wiki.gg/images/e/e4/Classicon_evoker_preservation.png?adfc2d",
+  havoc:
+    "https://warcraft.wiki.gg/images/2/2d/Demon_hunter_havoc_icon.png?a4ca1b",
+  vengeance:
+    "https://warcraft.wiki.gg/images/2/25/Demon_hunter_vengeance_icon.png?dc279a",
+  beastMastery:
+    "https://warcraft.wiki.gg/images/9/98/Ability_hunter_bestialdiscipline.png?a660d9",
+  marksmanship:
+    "https://warcraft.wiki.gg/images/d/de/Ability_hunter_focusedaim.png?5ee421",
+  survival:
+    "https://warcraft.wiki.gg/images/d/da/Ability_hunter_camouflage.png?7cbb8b",
+  arcane:
+    "https://warcraft.wiki.gg/images/d/d2/Spell_holy_magicalsentry.png?d5973e",
+  fire: "https://warcraft.wiki.gg/images/4/45/Spell_fire_firebolt02.png?f17e6c",
+  frostMage:
+    "https://warcraft.wiki.gg/images/1/1e/Spell_frost_frostbolt02.png?63ba31",
+  brewmaster:
+    "https://warcraft.wiki.gg/images/d/d1/Spell_monk_brewmaster_spec.png?4d2b6b",
+  mistweaver:
+    "https://warcraft.wiki.gg/images/4/4e/Spell_monk_mistweaver_spec.png?62ea51",
+  windwalker:
+    "https://warcraft.wiki.gg/images/a/aa/Spell_monk_windwalker_spec.png?2662ed",
+  holyPaladin:
+    "https://warcraft.wiki.gg/images/b/b4/Spell_holy_holybolt.png?7dc471",
+  protectionPaladin:
+    "https://warcraft.wiki.gg/images/2/2f/Ability_paladin_shieldofthetemplar.png?f1eafd",
+  retribution:
+    "https://warcraft.wiki.gg/images/0/0a/Spell_holy_auraoflight.png?4ae1f6",
+  discipline:
+    "https://warcraft.wiki.gg/images/3/35/Spell_holy_powerwordshield.png?47ae97",
+  holyPriest:
+    "https://warcraft.wiki.gg/images/d/d6/Spell_holy_guardianspirit.png?ea2213",
+  shadow:
+    "https://warcraft.wiki.gg/images/3/30/Spell_shadow_shadowwordpain.png?5d931a",
+  elemental:
+    "https://warcraft.wiki.gg/images/4/4c/Spell_nature_lightning.png?d27b19",
+  enhancement:
+    "https://warcraft.wiki.gg/images/c/c5/Spell_shaman_improvedstormstrike.png?a6f23b",
+  restorationShaman:
+    "https://warcraft.wiki.gg/images/d/da/Spell_nature_magicimmunity.png?2d65cd",
+  arms: "https://warcraft.wiki.gg/images/e/e7/Ability_warrior_savageblow.png?b575c2",
+  furry:
+    "https://warcraft.wiki.gg/images/2/24/Ability_warrior_innerrage.png?8918b0",
+  protectionWarrior:
+    "https://warcraft.wiki.gg/images/b/b1/Ability_warrior_defensivestance.png?2762a0",
+};

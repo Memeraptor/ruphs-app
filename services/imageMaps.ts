@@ -82,5 +82,3 @@ export const classMap: Record<string, string> = {
   warrior:
     "https://warcraft.wiki.gg/images/4/4f/Warrior_Crest.png?ca256a=&format=original",
 };
-
-export const specMap: Record<string, string> = {};
