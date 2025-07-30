@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { classMap } from "../../services/imageMaps/classIconMap";
+import { specMap } from "@/services/imageMaps/specializationIconMap";
 import Class from "@/services/Interfaces/Class";
 import Specialization from "@/services/Interfaces/Specialization";
 
@@ -69,26 +70,27 @@ export default function ClassSpecializationsCard({
       </div>
 
       {/* Specializations List */}
-      <div className="card-body p-6">
-        <div className="flex flex-wrap justify-evenly gap-3">
+      <div className="card-body p-4">
+        <div className="flex flex-wrap justify-evenly gap-1">
           {specializations.map((specialization) => (
             <div
               key={specialization.id}
               className="flex items-center gap-2 px-3 py-2 rounded-lg bg-base-200 hover:bg-base-300 transition-colors duration-200 flex-shrink-0"
             >
-              <div
+              {/* <div
                 className="w-2 h-2 rounded-full flex-shrink-0"
                 style={{
                   backgroundColor: classData.colorCode || "#6B7280",
                 }}
+              /> */}
+              <img
+                src={specMap[specialization.slug]}
+                className="w-6 h-6 rounded-full"
               />
               <Link href={`/specializations/${specialization.id}`}>
                 <h3 className="font-semibold text-sm text-base-content">
                   {specialization.name}
                 </h3>
-                <p className="text-base-content/50 text-xs">
-                  {specialization.slug}
-                </p>
               </Link>
             </div>
           ))}
