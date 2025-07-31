@@ -175,7 +175,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-base-100 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-screen mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-4xl font-bold text-base-content">
             Character Roster
@@ -219,7 +219,7 @@ export default function HomePage() {
                   </div>
 
                   <div className={`${colors.secondary} p-4 rounded-b-lg`}>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-3">
                       {Object.entries(factionData.classes)
                         .sort(([a], [b]) => a.localeCompare(b))
                         .map(([className, classData]) => (
@@ -283,7 +283,7 @@ export default function HomePage() {
                   </div>
 
                   <div className={`${colors.secondary} p-4 rounded-b-lg`}>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-3">
                       {Object.entries(factionData.classes)
                         .sort(([a], [b]) => a.localeCompare(b))
                         .map(([className, classData]) => (
