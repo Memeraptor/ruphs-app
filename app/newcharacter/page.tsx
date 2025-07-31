@@ -4,6 +4,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import CharacterBadge from "@/app/components/CharacterBadge"; // Adjust path as needed
 
+// --- INTERFACE DEFINITIONS ---
 interface Faction {
   id: number;
   name: string;
@@ -27,7 +28,7 @@ interface Specialization {
   id: number;
   name: string;
   slug: string;
-  class?: Class;
+  class?: Class; // This remains optional as it's a hydrated field
   classId: number;
 }
 
@@ -39,8 +40,8 @@ interface Character {
   note: string;
   raceId: number;
   specializationId: number;
-  race?: Race;
-  specialization?: Specialization;
+  race?: Race; // Optional, because it's hydrated
+  specialization?: Specialization; // Optional, because it's hydrated
 }
 
 interface FormData {
@@ -62,6 +63,7 @@ interface LoadingState {
   characters: boolean;
   submit: boolean;
 }
+// --- END INTERFACE DEFINITIONS ---
 
 const CharacterForm = () => {
   const router = useRouter();
@@ -78,8 +80,10 @@ const CharacterForm = () => {
   });
 
   const [factions, setFactions] = useState<Faction[]>([]);
-  const [races, setRaces] = useState<Race[]>([]);
-  const [classes, setClasses] = useState<Class[]>([]);
+  const [races, setRaces] = useState<Race[]>([]); // For the form's faction-filtered race dropdown
+  const [allRaces, setAllRaces] = useState<Race[]>([]); // NEW: Holds all races for global lookups
+  const [classes, setClasses] = useState<Class[]>([]); // For the form's race-filtered class dropdown
+  const [allClasses, setAllClasses] = useState<Class[]>([]); // Holds all classes for global lookups
   const [allSpecializations, setAllSpecializations] = useState<
     Specialization[]
   >([]);
@@ -101,13 +105,17 @@ const CharacterForm = () => {
 
   useEffect(() => {
     loadFactions();
+    loadAllRaces(); // NEW: Load all races globally
     loadAllSpecializations();
+    loadAllClasses();
     loadAllCharacters();
   }, []);
 
   useEffect(() => {
     if (formData.factionId) {
       const factionId = parseInt(formData.factionId);
+      // The `loadRaces` function below will filter the `races` state based on faction,
+      // which is correct for the form's dropdown.
       loadRaces(factionId);
     } else {
       setRaces([]);
@@ -164,7 +172,7 @@ const CharacterForm = () => {
       const response = await fetch(`/api/races?factionId=${factionId}`);
       if (!response.ok) throw new Error("Failed to load races");
       const data: Race[] = await response.json();
-      setRaces(data);
+      setRaces(data); // This populates the `races` state (faction-filtered) for the form dropdown
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to load races";
@@ -174,12 +182,29 @@ const CharacterForm = () => {
     }
   };
 
+  // NEW: Function to load ALL races into the allRaces state
+  const loadAllRaces = async () => {
+    try {
+      const response = await fetch("/api/races"); // Fetch all races, no faction filter
+      if (!response.ok) throw new Error("Failed to load all races for lookup");
+      const data: Race[] = await response.json();
+      setAllRaces(data);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to load all races for lookup";
+      setError(errorMessage);
+    }
+  };
+
   const loadClasses = async (raceId: number) => {
     setLoading((prev) => ({ ...prev, classes: true }));
     try {
-      const classesResponse = await fetch("/api/classes");
-      if (!classesResponse.ok) throw new Error("Failed to load classes list");
-      const allClasses: Class[] = await classesResponse.json();
+      const allClassesResponse = await fetch("/api/classes");
+      if (!allClassesResponse.ok)
+        throw new Error("Failed to load classes list");
+      const fetchedAllClasses: Class[] = await allClassesResponse.json();
 
       const raceClassResponse = await fetch(
         `/api/race-classes?raceId=${raceId}`
@@ -193,7 +218,7 @@ const CharacterForm = () => {
           combination.classId || combination.class_id || combination.id
       );
 
-      const availableClasses = allClasses.filter((cls: Class) =>
+      const availableClasses = fetchedAllClasses.filter((cls: Class) =>
         availableClassIds.includes(cls.id)
       );
 
@@ -206,6 +231,22 @@ const CharacterForm = () => {
       setError(errorMessage);
     } finally {
       setLoading((prev) => ({ ...prev, classes: false }));
+    }
+  };
+
+  const loadAllClasses = async () => {
+    try {
+      const response = await fetch("/api/classes");
+      if (!response.ok)
+        throw new Error("Failed to load all classes for lookup");
+      const data: Class[] = await response.json();
+      setAllClasses(data);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to load all classes for lookup";
+      setError(errorMessage);
     }
   };
 
@@ -230,11 +271,6 @@ const CharacterForm = () => {
       const response = await fetch("/api/characters");
       if (!response.ok) throw new Error("Failed to load characters");
       const data: Character[] = await response.json();
-
-      if (data.length > 0) {
-        console.log("First character structure:", data[0]);
-      }
-
       setAllCharacters(data);
     } catch (error: unknown) {
       const errorMessage =
@@ -598,7 +634,8 @@ const CharacterForm = () => {
                       {raceCharacters.map((character) => {
                         const hydratedCharacter: Character = {
                           ...character,
-                          race: races.find((r) => r.id === character.raceId),
+                          // FIX for Race Hydration: Use allRaces for race lookup
+                          race: allRaces.find((r) => r.id === character.raceId),
                           specialization: allSpecializations.find(
                             (s) => s.id === character.specializationId
                           ),
@@ -608,29 +645,32 @@ const CharacterForm = () => {
                           hydratedCharacter.specialization &&
                           hydratedCharacter.specialization.classId
                         ) {
-                          hydratedCharacter.specialization.class = classes.find(
-                            (c) =>
-                              c.id === hydratedCharacter.specialization?.classId
-                          );
+                          // Use allClasses for class lookup
+                          hydratedCharacter.specialization.class =
+                            allClasses.find(
+                              (c) =>
+                                c.id ===
+                                hydratedCharacter.specialization?.classId
+                            );
                         }
 
-                        // IMPORTANT: Only render if we have all the data CharacterBadge needs
+                        // Ensure all expected properties for CharacterBadge are present
                         if (
                           !hydratedCharacter.race ||
                           !hydratedCharacter.specialization ||
                           !hydratedCharacter.specialization.class
                         ) {
                           console.warn(
-                            "Skipping CharacterBadge due to incomplete data:",
+                            "Skipping CharacterBadge (race filter) due to incomplete data after hydration:",
                             hydratedCharacter
                           );
-                          return null; // Don't render if data is not complete
+                          return null;
                         }
 
                         return (
                           <CharacterBadge
                             key={character.id}
-                            character={hydratedCharacter as Required<Character>}
+                            character={hydratedCharacter}
                           />
                         );
                       })}
@@ -644,14 +684,17 @@ const CharacterForm = () => {
               </div>
             )}
 
-            {/* Characters by Class */}
+            {/* Characters by Class: Displays ALL characters of the selected class, regardless of race/faction */}
             {formData.classId && (
               <div className="card bg-base-100 shadow-xl">
                 <div className="card-body">
                   <h3 className="card-title text-lg">
+                    All{" "}
                     {
-                      classes.find((c) => c.id === parseInt(formData.classId))
-                        ?.name
+                      // Get class name from the full allClasses list for display
+                      allClasses.find(
+                        (c) => c.id === parseInt(formData.classId)
+                      )?.name
                     }{" "}
                     Characters
                     <span className="badge badge-secondary">
@@ -663,11 +706,12 @@ const CharacterForm = () => {
                       <span className="loading loading-spinner loading-md"></span>
                     </div>
                   ) : classCharacters.length > 0 ? (
-                    <div className="space-y-2 max-h-64 overflow-y-auto">
+                    <div className="space-y-2 max-h-94 overflow-y-auto">
                       {classCharacters.map((character) => {
                         const hydratedCharacter: Character = {
                           ...character,
-                          race: races.find((r) => r.id === character.raceId),
+                          // FIX for Race Hydration: Use allRaces for race lookup
+                          race: allRaces.find((r) => r.id === character.raceId),
                           specialization: allSpecializations.find(
                             (s) => s.id === character.specializationId
                           ),
@@ -677,29 +721,32 @@ const CharacterForm = () => {
                           hydratedCharacter.specialization &&
                           hydratedCharacter.specialization.classId
                         ) {
-                          hydratedCharacter.specialization.class = classes.find(
-                            (c) =>
-                              c.id === hydratedCharacter.specialization?.classId
-                          );
+                          // Use allClasses for class lookup
+                          hydratedCharacter.specialization.class =
+                            allClasses.find(
+                              (c) =>
+                                c.id ===
+                                hydratedCharacter.specialization?.classId
+                            );
                         }
 
-                        // IMPORTANT: Only render if we have all the data CharacterBadge needs
+                        // Ensure all expected properties for CharacterBadge are present
                         if (
                           !hydratedCharacter.race ||
                           !hydratedCharacter.specialization ||
                           !hydratedCharacter.specialization.class
                         ) {
                           console.warn(
-                            "Skipping CharacterBadge due to incomplete data:",
+                            "Skipping CharacterBadge (class filter) due to incomplete data after hydration:",
                             hydratedCharacter
                           );
-                          return null; // Don't render if data is not complete
+                          return null;
                         }
 
                         return (
                           <CharacterBadge
                             key={character.id}
-                            character={hydratedCharacter as Required<Character>}
+                            character={hydratedCharacter}
                           />
                         );
                       })}
