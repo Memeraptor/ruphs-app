@@ -20,21 +20,26 @@ interface Class {
   colorCode: string;
 }
 
+// Make 'class' optional here as well, because the lookup in CharacterForm might return undefined
 interface Specialization {
   id: number;
   name: string;
   slug: string;
-  class: Class;
+  class?: Class; // This is the key change here
+  classId?: number; // Also make this optional if your specializations API doesn't guarantee it
 }
 
+// Make 'race' and 'specialization' optional, and match the 'id' fields from the API
 interface Character {
   id: number;
   name: string;
   level: number;
   gender: "male" | "female";
   note: string;
-  race: Race;
-  specialization: Specialization;
+  raceId?: number; // Keep these if CharacterBadge needs to know the original IDs
+  specializationId?: number; // Keep these if CharacterBadge needs to know the original IDs
+  race?: Race; // This can be undefined if lookup failed
+  specialization?: Specialization; // This can be undefined if lookup failed
 }
 
 interface CharacterBadgeProps {
@@ -42,20 +47,28 @@ interface CharacterBadgeProps {
 }
 
 export default function CharacterBadge({ character }: CharacterBadgeProps) {
-  const getPortraitImage = (character: Character) => {
+  // Use optional chaining for safe access
+  const raceName = character.race?.name || "Unknown Race";
+  const raceSlug = character.race?.slug || "unknown"; // Fallback for slug for image map
+  const specializationName =
+    character.specialization?.name || "Unknown Specialization";
+  const specializationSlug = character.specialization?.slug || "unknown"; // Fallback for slug for image map
+  // Access class name defensively through specialization
+  const className = character.specialization?.class?.name || "Unknown Class";
+
+  const getPortraitImage = (char: Character) => {
     try {
       return (
-        genderImages[character.race.slug]?.[character.gender] ||
-        "/placeholder-portrait.png"
+        genderImages[raceSlug]?.[char.gender] || "/placeholder-portrait.png"
       );
     } catch {
       return "/placeholder-portrait.png";
     }
   };
 
-  const getSpecializationImage = (character: Character) => {
+  const getSpecializationImage = (char: Character) => {
     try {
-      return specMap[character.specialization.slug] || "/placeholder-spec.png";
+      return specMap[specializationSlug] || "/placeholder-spec.png";
     } catch {
       return "/placeholder-spec.png";
     }
@@ -68,7 +81,7 @@ export default function CharacterBadge({ character }: CharacterBadgeProps) {
         <div className="flex-shrink-0">
           <img
             src={getPortraitImage(character)}
-            alt={`${character.race.name} ${character.gender}`}
+            alt={`${raceName} ${character.gender}`}
             className="w-8 h-8 rounded-full object-cover border border-base-300"
             onError={(e) => {
               e.currentTarget.src = "/placeholder-portrait.png";
@@ -82,7 +95,7 @@ export default function CharacterBadge({ character }: CharacterBadgeProps) {
             {character.name}
           </h4>
           <p className="text-xs text-base-content/70 truncate">
-            {character.race.name} {character.specialization.name}
+            {raceName} {specializationName} ({className})
           </p>
         </div>
 
@@ -90,7 +103,7 @@ export default function CharacterBadge({ character }: CharacterBadgeProps) {
         <div className="flex-shrink-0">
           <img
             src={getSpecializationImage(character)}
-            alt={character.specialization.name}
+            alt={specializationName}
             className="w-6 h-6 object-contain"
             onError={(e) => {
               e.currentTarget.src = "/placeholder-spec.png";
