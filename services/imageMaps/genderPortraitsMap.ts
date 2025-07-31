@@ -1,4 +1,9 @@
-export const genderImages = {
+type GenderPortraitMap = {
+  male: string;
+  female: string;
+};
+
+export const genderImages: Record<string, GenderPortraitMap> = {
   bloodElf: {
     male: "https://warcraft.wiki.gg/images/0/0d/Ui-charactercreate-races_bloodelf-female-alternate.png?608031",
     female:

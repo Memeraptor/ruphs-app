@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { genderImages } from "@/services/imageMaps/genderPortraitsMap";
-import { specMap } from "@/services/imageMaps/specializationIconMap";
+import CharacterBadge from "@/app/components/CharacterBadge";
 
 interface Faction {
   id: number;
@@ -34,7 +33,7 @@ interface Character {
   id: number;
   name: string;
   level: number;
-  gender: string;
+  gender: "male" | "female";
   note: string;
   race: Race;
   specialization: Specialization;
@@ -131,25 +130,6 @@ export default function HomePage() {
       text: "text-gray-100",
       border: "border-gray-600",
     };
-  };
-
-  const getPortraitImage = (character: Character) => {
-    try {
-      return (
-        genderImages[character.race.slug]?.[character.gender] ||
-        "/placeholder-portrait.png"
-      );
-    } catch {
-      return "/placeholder-portrait.png";
-    }
-  };
-
-  const getSpecializationImage = (character: Character) => {
-    try {
-      return specMap[character.specialization.slug] || "/placeholder-spec.png";
-    } catch {
-      return "/placeholder-spec.png";
-    }
   };
 
   if (loading) {
@@ -251,61 +231,12 @@ export default function HomePage() {
                           </div>
 
                           {/* Character Badges */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 px-3 pb-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 px-3 pb-3">
                             {classData.characters.map((character) => (
-                              <div
+                              <CharacterBadge
                                 key={character.id}
-                                className="bg-base-100 rounded-lg p-3 shadow-md hover:shadow-lg transition-shadow border border-base-300"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  {/* Portrait Image */}
-                                  <div className="flex-shrink-0">
-                                    <img
-                                      src={getPortraitImage(character)}
-                                      alt={`${character.race.name} ${character.gender}`}
-                                      className="w-12 h-12 rounded-full object-cover border-2 border-base-300"
-                                      onError={(e) => {
-                                        e.currentTarget.src =
-                                          "/placeholder-portrait.png";
-                                      }}
-                                    />
-                                  </div>
-
-                                  {/* Character Info */}
-                                  <div className="flex-grow min-w-0">
-                                    <h4 className="font-semibold text-base-content truncate">
-                                      {character.name}
-                                    </h4>
-                                    <p className="text-xs text-base-content/70 truncate">
-                                      {character.race.name}{" "}
-                                      {character.specialization.name} • Lvl{" "}
-                                      {character.level}
-                                    </p>
-                                  </div>
-
-                                  {/* Specialization Icon */}
-                                  <div className="flex-shrink-0">
-                                    <img
-                                      src={getSpecializationImage(character)}
-                                      alt={character.specialization.name}
-                                      className="w-8 h-8 object-contain"
-                                      onError={(e) => {
-                                        e.currentTarget.src =
-                                          "/placeholder-spec.png";
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-
-                                {/* Character Note (if exists) */}
-                                {character.note && (
-                                  <div className="mt-2 pt-2 border-t border-base-300">
-                                    <p className="text-xs text-base-content/60 line-clamp-2">
-                                      {character.note}
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
+                                character={character}
+                              />
                             ))}
                           </div>
                         </div>
@@ -352,61 +283,12 @@ export default function HomePage() {
                           </div>
 
                           {/* Character Badges */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 px-3 pb-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 px-3 pb-3">
                             {classData.characters.map((character) => (
-                              <div
+                              <CharacterBadge
                                 key={character.id}
-                                className="bg-base-100 rounded-lg p-3 shadow-md hover:shadow-lg transition-shadow border border-base-300"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  {/* Portrait Image */}
-                                  <div className="flex-shrink-0">
-                                    <img
-                                      src={getPortraitImage(character)}
-                                      alt={`${character.race.name} ${character.gender}`}
-                                      className="w-12 h-12 rounded-full object-cover border-2 border-base-300"
-                                      onError={(e) => {
-                                        e.currentTarget.src =
-                                          "/placeholder-portrait.png";
-                                      }}
-                                    />
-                                  </div>
-
-                                  {/* Character Info */}
-                                  <div className="flex-grow min-w-0">
-                                    <h4 className="font-semibold text-base-content truncate">
-                                      {character.name}
-                                    </h4>
-                                    <p className="text-xs text-base-content/70 truncate">
-                                      {character.race.name}{" "}
-                                      {character.specialization.name} • Lvl{" "}
-                                      {character.level}
-                                    </p>
-                                  </div>
-
-                                  {/* Specialization Icon */}
-                                  <div className="flex-shrink-0">
-                                    <img
-                                      src={getSpecializationImage(character)}
-                                      alt={character.specialization.name}
-                                      className="w-8 h-8 object-contain"
-                                      onError={(e) => {
-                                        e.currentTarget.src =
-                                          "/placeholder-spec.png";
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-
-                                {/* Character Note (if exists) */}
-                                {character.note && (
-                                  <div className="mt-2 pt-2 border-t border-base-300">
-                                    <p className="text-xs text-base-content/60 line-clamp-2">
-                                      {character.note}
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
+                                character={character}
+                              />
                             ))}
                           </div>
                         </div>
