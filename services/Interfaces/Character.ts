@@ -1,9 +1,11 @@
+import { Race, Specialization } from "@prisma/client";
+
 export default interface Character {
   id: number;
   name: string;
   level: number;
-  gender: string;
+  gender: "male" | "female";
   note: string;
-  raceId: number;
-  specializationId: number;
+  race: Race;
+  specialization: Specialization;
 }
