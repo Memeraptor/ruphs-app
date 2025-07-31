@@ -1,16 +1,59 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import Class from "@/services/Interfaces/Class";
-import Specialization from "@/services/Interfaces/Specialization";
-import Race from "@/services/Interfaces/Race";
-import Faction from "@/services/Interfaces/Faction";
+
+interface Faction {
+  id: number;
+  name: string;
+}
+
+interface Race {
+  id: number;
+  name: string;
+  slug: string;
+  faction: Faction;
+}
+
+interface Class {
+  id: number;
+  name: string;
+  slug: string;
+  colorCode: string;
+}
+
+interface Specialization {
+  id: number;
+  name: string;
+  slug: string;
+  class: Class;
+  classId: number; // Added this missing property
+}
+
+interface FormData {
+  name: string;
+  level: number;
+  gender: string;
+  factionId: string;
+  raceId: string;
+  classId: string;
+  specializationId: string;
+  note: string;
+}
+
+interface LoadingState {
+  factions: boolean;
+  races: boolean;
+  classes: boolean;
+  specializations: boolean;
+  submit: boolean;
+}
 
 const CharacterForm = () => {
   const router = useRouter();
+
   // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     level: 1,
     gender: "",
@@ -22,14 +65,16 @@ const CharacterForm = () => {
   });
 
   // Dropdown data state
-  const [factions, setFactions] = useState([]);
-  const [races, setRaces] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [allSpecializations, setAllSpecializations] = useState([]);
-  const [specializations, setSpecializations] = useState([]);
+  const [factions, setFactions] = useState<Faction[]>([]);
+  const [races, setRaces] = useState<Race[]>([]);
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [allSpecializations, setAllSpecializations] = useState<
+    Specialization[]
+  >([]);
+  const [specializations, setSpecializations] = useState<Specialization[]>([]);
 
   // Loading states
-  const [loading, setLoading] = useState({
+  const [loading, setLoading] = useState<LoadingState>({
     factions: false,
     races: false,
     classes: false,
@@ -37,9 +82,9 @@ const CharacterForm = () => {
     submit: false,
   });
 
-  // Error state
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  // Error and success state
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
 
   // Load factions and all specializations on component mount
   useEffect(() => {
@@ -50,7 +95,8 @@ const CharacterForm = () => {
   // Load races when faction changes
   useEffect(() => {
     if (formData.factionId) {
-      loadRaces(formData.factionId);
+      const factionId = parseInt(formData.factionId);
+      loadRaces(factionId);
     } else {
       setRaces([]);
       setFormData((prev) => ({
@@ -65,7 +111,8 @@ const CharacterForm = () => {
   // Load classes when race changes
   useEffect(() => {
     if (formData.raceId) {
-      loadClasses(formData.raceId);
+      const raceId = parseInt(formData.raceId);
+      loadClasses(raceId);
     } else {
       setClasses([]);
       setFormData((prev) => ({ ...prev, classId: "", specializationId: "" }));
@@ -91,10 +138,12 @@ const CharacterForm = () => {
     try {
       const response = await fetch("/api/factions");
       if (!response.ok) throw new Error("Failed to load factions");
-      const data = await response.json();
+      const data: Faction[] = await response.json();
       setFactions(data);
-    } catch (err) {
-      setError("Failed to load factions");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to load factions";
+      setError(errorMessage);
     } finally {
       setLoading((prev) => ({ ...prev, factions: false }));
     }
@@ -105,10 +154,12 @@ const CharacterForm = () => {
     try {
       const response = await fetch(`/api/races?factionId=${factionId}`);
       if (!response.ok) throw new Error("Failed to load races");
-      const data = await response.json();
+      const data: Race[] = await response.json();
       setRaces(data);
-    } catch (err) {
-      setError("Failed to load races");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to load races";
+      setError(errorMessage);
     } finally {
       setLoading((prev) => ({ ...prev, races: false }));
     }
@@ -120,7 +171,7 @@ const CharacterForm = () => {
       // First, get all classes
       const classesResponse = await fetch("/api/classes");
       if (!classesResponse.ok) throw new Error("Failed to load classes list");
-      const allClasses = await classesResponse.json();
+      const allClasses: Class[] = await classesResponse.json();
 
       // Then, get race-class combinations for this race
       const raceClassResponse = await fetch(
@@ -132,7 +183,7 @@ const CharacterForm = () => {
 
       // Extract the classIds from race-class combinations
       const availableClassIds = raceClassCombinations.map(
-        (combination) =>
+        (combination: any) =>
           combination.classId || combination.class_id || combination.id
       );
 
@@ -142,8 +193,12 @@ const CharacterForm = () => {
       );
 
       setClasses(availableClasses);
-    } catch (err) {
-      setError(`Failed to load classes: ${err.message}`);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? `Failed to load classes: ${error.message}`
+          : "Failed to load classes";
+      setError(errorMessage);
     } finally {
       setLoading((prev) => ({ ...prev, classes: false }));
     }
@@ -153,17 +208,26 @@ const CharacterForm = () => {
     try {
       const response = await fetch("/api/specializations");
       if (!response.ok) throw new Error("Failed to load specializations");
-      const data = await response.json();
+      const data: Specialization[] = await response.json();
       setAllSpecializations(data);
-    } catch (err) {
-      setError("Failed to load specializations");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to load specializations";
+      setError(errorMessage);
     }
   };
 
   // Handle form input changes
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "level" ? parseInt(value) || 1 : value,
+    }));
     setError("");
     setSuccess("");
   };
@@ -193,7 +257,7 @@ const CharacterForm = () => {
         },
         body: JSON.stringify({
           name: formData.name.trim(),
-          level: parseInt(formData.level),
+          level: formData.level,
           gender: formData.gender,
           raceId: parseInt(formData.raceId),
           specializationId: parseInt(formData.specializationId),
@@ -212,6 +276,7 @@ const CharacterForm = () => {
       setTimeout(() => {
         router.push("/");
       }, 1500);
+
       // Reset form
       setFormData({
         name: "",
@@ -223,8 +288,10 @@ const CharacterForm = () => {
         specializationId: "",
         note: "",
       });
-    } catch (err) {
-      setError(err.message || "Failed to create character");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to create character";
+      setError(errorMessage);
     } finally {
       setLoading((prev) => ({ ...prev, submit: false }));
     }
