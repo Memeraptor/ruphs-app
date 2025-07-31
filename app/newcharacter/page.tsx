@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Class from "@/services/Interfaces/Class";
+import Specialization from "@/services/Interfaces/Specialization";
+import Race from "@/services/Interfaces/Race";
+import Faction from "@/services/Interfaces/Faction";
 
 const CharacterForm = () => {
   const router = useRouter();
@@ -72,7 +76,7 @@ const CharacterForm = () => {
   useEffect(() => {
     if (formData.classId && allSpecializations.length > 0) {
       const filteredSpecs = allSpecializations.filter(
-        (spec) => spec.classId === parseInt(formData.classId)
+        (spec: Specialization) => spec.classId === parseInt(formData.classId)
       );
       setSpecializations(filteredSpecs);
     } else {
@@ -96,7 +100,7 @@ const CharacterForm = () => {
     }
   };
 
-  const loadRaces = async (factionId) => {
+  const loadRaces = async (factionId: number) => {
     setLoading((prev) => ({ ...prev, races: true }));
     try {
       const response = await fetch(`/api/races?factionId=${factionId}`);
@@ -110,7 +114,7 @@ const CharacterForm = () => {
     }
   };
 
-  const loadClasses = async (raceId) => {
+  const loadClasses = async (raceId: number) => {
     setLoading((prev) => ({ ...prev, classes: true }));
     try {
       // First, get all classes
@@ -133,7 +137,7 @@ const CharacterForm = () => {
       );
 
       // Filter the full classes list to only include available classes
-      const availableClasses = allClasses.filter((cls) =>
+      const availableClasses = allClasses.filter((cls: Class) =>
         availableClassIds.includes(cls.id)
       );
 
@@ -337,7 +341,7 @@ const CharacterForm = () => {
                 <option value="">
                   {loading.factions ? "Loading factions..." : "Select Faction"}
                 </option>
-                {factions.map((faction) => (
+                {factions.map((faction: Faction) => (
                   <option key={faction.id} value={faction.id}>
                     {faction.name}
                   </option>
@@ -365,7 +369,7 @@ const CharacterForm = () => {
                     ? "Loading races..."
                     : "Select Race"}
                 </option>
-                {races.map((race) => (
+                {races.map((race: Race) => (
                   <option key={race.id} value={race.id}>
                     {race.name}
                   </option>
@@ -393,7 +397,7 @@ const CharacterForm = () => {
                     ? "Loading classes..."
                     : "Select Class"}
                 </option>
-                {classes.map((cls) => (
+                {classes.map((cls: Class) => (
                   <option key={cls.id} value={cls.id}>
                     {cls.name}
                   </option>
@@ -421,7 +425,7 @@ const CharacterForm = () => {
                     ? "Loading specializations..."
                     : "Select Specialization"}
                 </option>
-                {specializations.map((spec) => (
+                {specializations.map((spec: Specialization) => (
                   <option key={spec.id} value={spec.id}>
                     {spec.name}
                   </option>

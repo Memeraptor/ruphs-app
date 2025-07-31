@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import CharacterBadge from "@/app/components/CharacterBadge";
+import { classMap } from "@/services/imageMaps/classIconMap";
 
 interface Faction {
   id: number;
@@ -104,6 +105,14 @@ export default function HomePage() {
     }, {} as GroupedCharacters);
   };
 
+  const getClassBackgroundImage = (classSlug: string) => {
+    try {
+      return classMap[classSlug] || "";
+    } catch {
+      return "";
+    }
+  };
+
   const getFactionColors = (factionName: string) => {
     if (factionName.toLowerCase().includes("alliance")) {
       return {
@@ -122,7 +131,6 @@ export default function HomePage() {
         border: "border-red-600",
       };
     }
-    // Default colors if faction doesn't match Alliance or Horde
     return {
       primary: "bg-gray-900",
       secondary: "bg-gray-800",
@@ -195,7 +203,6 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Alliance Faction */}
           {Object.entries(groupedCharacters)
             .filter(([factionName]) =>
               factionName.toLowerCase().includes("alliance")
@@ -205,49 +212,61 @@ export default function HomePage() {
 
               return (
                 <div key={factionName} className="mb-8">
-                  {/* Faction Header */}
                   <div
                     className={`${colors.primary} ${colors.text} p-4 rounded-t-lg border-b-2 ${colors.border}`}
                   >
                     <h2 className="text-2xl font-bold">{factionName}</h2>
                   </div>
 
-                  {/* Classes within Faction */}
                   <div className={`${colors.secondary} p-4 rounded-b-lg`}>
-                    {Object.entries(factionData.classes).map(
-                      ([className, classData]) => (
-                        <div key={className} className="mb-6 last:mb-0">
-                          {/* Class Header */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+                      {Object.entries(factionData.classes)
+                        .sort(([a], [b]) => a.localeCompare(b))
+                        .map(([className, classData]) => (
                           <div
-                            className={`${colors.tertiary} ${colors.text} p-3 rounded-t-lg mb-3`}
+                            key={className}
+                            className="bg-base-100 rounded-lg shadow-lg overflow-hidden"
                           >
-                            <h3 className="text-xl font-semibold">
-                              {className}
-                            </h3>
-                            <p className="text-sm opacity-80">
-                              {classData.characters.length} character
-                              {classData.characters.length !== 1 ? "s" : ""}
-                            </p>
-                          </div>
+                            <div
+                              className="relative p-3 bg-cover bg-center bg-gray-600"
+                              style={{
+                                backgroundImage: getClassBackgroundImage(
+                                  classData.class.slug
+                                )
+                                  ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${getClassBackgroundImage(
+                                      classData.class.slug
+                                    )})`
+                                  : "linear-gradient(135deg, #374151, #4b5563)",
+                              }}
+                            >
+                              <h3
+                                className="text-lg font-bold drop-shadow-lg mb-2"
+                                style={{
+                                  color: classData.class.colorCode || "#ffffff",
+                                }}
+                              >
+                                {className}
+                              </h3>
 
-                          {/* Character Badges */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 px-3 pb-3">
-                            {classData.characters.map((character) => (
-                              <CharacterBadge
-                                key={character.id}
-                                character={character}
-                              />
-                            ))}
+                              <div className="space-y-1">
+                                {classData.characters
+                                  .sort((a, b) => a.name.localeCompare(b.name))
+                                  .map((character) => (
+                                    <CharacterBadge
+                                      key={character.id}
+                                      character={character}
+                                    />
+                                  ))}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      )
-                    )}
+                        ))}
+                    </div>
                   </div>
                 </div>
               );
             })}
 
-          {/* Horde Faction */}
           {Object.entries(groupedCharacters)
             .filter(([factionName]) =>
               factionName.toLowerCase().includes("horde")
@@ -257,43 +276,56 @@ export default function HomePage() {
 
               return (
                 <div key={factionName} className="mb-8">
-                  {/* Faction Header */}
                   <div
                     className={`${colors.primary} ${colors.text} p-4 rounded-t-lg border-b-2 ${colors.border}`}
                   >
                     <h2 className="text-2xl font-bold">{factionName}</h2>
                   </div>
 
-                  {/* Classes within Faction */}
                   <div className={`${colors.secondary} p-4 rounded-b-lg`}>
-                    {Object.entries(factionData.classes).map(
-                      ([className, classData]) => (
-                        <div key={className} className="mb-6 last:mb-0">
-                          {/* Class Header */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+                      {Object.entries(factionData.classes)
+                        .sort(([a], [b]) => a.localeCompare(b))
+                        .map(([className, classData]) => (
                           <div
-                            className={`${colors.tertiary} ${colors.text} p-3 rounded-t-lg mb-3`}
+                            key={className}
+                            className="bg-base-100 rounded-lg shadow-lg overflow-hidden"
                           >
-                            <h3 className="text-xl font-semibold">
-                              {className}
-                            </h3>
-                            <p className="text-sm opacity-80">
-                              {classData.characters.length} character
-                              {classData.characters.length !== 1 ? "s" : ""}
-                            </p>
-                          </div>
+                            <div
+                              className="relative p-3 bg-cover bg-center bg-gray-600"
+                              style={{
+                                backgroundImage: getClassBackgroundImage(
+                                  classData.class.slug
+                                )
+                                  ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${getClassBackgroundImage(
+                                      classData.class.slug
+                                    )})`
+                                  : "linear-gradient(135deg, #374151, #4b5563)",
+                              }}
+                            >
+                              <h3
+                                className="text-lg font-bold drop-shadow-lg mb-2"
+                                style={{
+                                  color: classData.class.colorCode || "#ffffff",
+                                }}
+                              >
+                                {className}
+                              </h3>
 
-                          {/* Character Badges */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 px-3 pb-3">
-                            {classData.characters.map((character) => (
-                              <CharacterBadge
-                                key={character.id}
-                                character={character}
-                              />
-                            ))}
+                              <div className="space-y-1">
+                                {classData.characters
+                                  .sort((a, b) => a.name.localeCompare(b.name))
+                                  .map((character) => (
+                                    <CharacterBadge
+                                      key={character.id}
+                                      character={character}
+                                    />
+                                  ))}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      )
-                    )}
+                        ))}
+                    </div>
                   </div>
                 </div>
               );
