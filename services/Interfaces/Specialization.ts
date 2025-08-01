@@ -1,9 +1,9 @@
 import Class from "./Class";
 
 export default interface Specialization {
-  id: string;
+  id: number;
   name: string;
   slug: string;
-  class: Class;
+  class?: Class;
   classId: number;
 }

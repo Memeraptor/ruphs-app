@@ -3,46 +3,13 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import CharacterBadge from "@/app/components/CharacterBadge"; // Adjust path as needed
+import Faction from "@/services/Interfaces/Faction";
+import Class from "@/services/Interfaces/Class";
+import Race from "@/services/Interfaces/Race";
+import Specialization from "@/services/Interfaces/Specialization";
+import Character from "@/services/Interfaces/Character";
 
 // --- INTERFACE DEFINITIONS ---
-interface Faction {
-  id: number;
-  name: string;
-}
-
-interface Race {
-  id: number;
-  name: string;
-  slug: string;
-  faction: Faction;
-}
-
-interface Class {
-  id: number;
-  name: string;
-  slug: string;
-  colorCode: string;
-}
-
-interface Specialization {
-  id: number;
-  name: string;
-  slug: string;
-  class?: Class; // This remains optional as it's a hydrated field
-  classId: number;
-}
-
-interface Character {
-  id: number;
-  name: string;
-  level: number;
-  gender: "male" | "female";
-  note: string;
-  raceId: number;
-  specializationId: number;
-  race?: Race; // Optional, because it's hydrated
-  specialization?: Specialization; // Optional, because it's hydrated
-}
 
 interface FormData {
   name: string;

@@ -69,7 +69,7 @@ export default function RaceClassesViewPage() {
       grouped[raceId].classes.push(raceClass.class);
 
       // Collect unique factions
-      if (raceClass.race.faction) {
+      if (raceClass.race?.faction) {
         factionsSet.add(JSON.stringify(raceClass.race.faction));
       }
     });

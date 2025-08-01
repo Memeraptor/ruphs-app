@@ -54,12 +54,12 @@ export default function SpecializationPage() {
       filtered = filtered.filter(
         (spec) =>
           spec.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          spec.class.name.toLowerCase().includes(searchTerm.toLowerCase())
+          spec.class?.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (selectedClass !== "all") {
-      filtered = filtered.filter((spec) => spec.class.slug === selectedClass);
+      filtered = filtered.filter((spec) => spec.class?.slug === selectedClass);
     }
 
     setFilteredSpecializations(filtered);
@@ -68,23 +68,23 @@ export default function SpecializationPage() {
   // Group specializations by class
   const groupedSpecializations: GroupedSpecializations =
     filteredSpecializations.reduce((acc, spec) => {
-      const className = spec.class.name;
-      if (!acc[className]) {
-        acc[className] = {
-          class: spec.class,
+      const className = spec.class?.name;
+      if (!acc[className!]) {
+        acc[className!] = {
+          class: spec.class!,
           specializations: [],
         };
       }
-      acc[className].specializations.push(spec);
+      acc[className!].specializations.push(spec);
       return acc;
     }, {} as GroupedSpecializations);
 
   // Get unique classes for filter dropdown
   const availableClasses = Array.from(
-    new Set(specializations.map((spec) => spec.class.slug))
+    new Set(specializations.map((spec) => spec.class?.slug))
   )
     .map(
-      (slug) => specializations.find((spec) => spec.class.slug === slug)?.class
+      (slug) => specializations.find((spec) => spec.class?.slug === slug)?.class
     )
     .filter(Boolean) as Class[];
 

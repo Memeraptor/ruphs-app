@@ -162,7 +162,7 @@ export default function SpecializationPage() {
   }
 
   const classImageUrl =
-    classMap[specialization.class.slug] || "/images/default-class.png";
+    classMap[specialization.class!.slug!] || "/images/default-class.png";
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -179,7 +179,7 @@ export default function SpecializationPage() {
               <div
                 className="absolute inset-0 rounded-xl"
                 style={{
-                  background: `linear-gradient(135deg, ${specialization.class.colorCode}80, transparent)`,
+                  background: `linear-gradient(135deg, ${specialization.class?.colorCode}80, transparent)`,
                 }}
               ></div>
             </div>
@@ -192,9 +192,9 @@ export default function SpecializationPage() {
               <div className="flex items-center gap-3">
                 <div
                   className="badge badge-lg text-white font-medium"
-                  style={{ backgroundColor: specialization.class.colorCode }}
+                  style={{ backgroundColor: specialization.class?.colorCode }}
                 >
-                  {specialization.class.name}
+                  {specialization.class?.name}
                 </div>
                 <div className="text-sm text-base-content/60">
                   ID: {specialization.id}
@@ -240,7 +240,7 @@ export default function SpecializationPage() {
                   </button>
                   <button
                     className="btn text-white"
-                    style={{ backgroundColor: specialization.class.colorCode }}
+                    style={{ backgroundColor: specialization.class?.colorCode }}
                     onClick={handleSave}
                     disabled={saving}
                   >
@@ -254,7 +254,7 @@ export default function SpecializationPage() {
               ) : (
                 <button
                   className="btn text-white"
-                  style={{ backgroundColor: specialization.class.colorCode }}
+                  style={{ backgroundColor: specialization.class?.colorCode }}
                   onClick={handleEdit}
                 >
                   <svg
@@ -341,15 +341,15 @@ export default function SpecializationPage() {
                     ></div>
                     <div>
                       <div className="font-semibold">
-                        {specialization.class.name}
+                        {specialization.class?.name}
                       </div>
                       <div
                         className="badge badge-sm text-white"
                         style={{
-                          backgroundColor: specialization.class.colorCode,
+                          backgroundColor: specialization.class?.colorCode,
                         }}
                       >
-                        {specialization.class.slug}
+                        {specialization.class?.slug}
                       </div>
                     </div>
                   </div>

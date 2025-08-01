@@ -1,46 +1,8 @@
 import { genderImages } from "@/services/imageMaps/genderPortraitsMap";
 import { specMap } from "@/services/imageMaps/specializationIconMap";
-
-interface Faction {
-  id: number;
-  name: string;
-}
-
-interface Race {
-  id: number;
-  name: string;
-  slug: string;
-  faction: Faction;
-}
-
-interface Class {
-  id: number;
-  name: string;
-  slug: string;
-  colorCode: string;
-}
-
-// Make 'class' optional here as well, because the lookup in CharacterForm might return undefined
-interface Specialization {
-  id: number;
-  name: string;
-  slug: string;
-  class?: Class; // This is the key change here
-  classId?: number; // Also make this optional if your specializations API doesn't guarantee it
-}
+import Character from "@/services/Interfaces/Character";
 
 // Make 'race' and 'specialization' optional, and match the 'id' fields from the API
-interface Character {
-  id: number;
-  name: string;
-  level: number;
-  gender: "male" | "female";
-  note: string;
-  raceId?: number; // Keep these if CharacterBadge needs to know the original IDs
-  specializationId?: number; // Keep these if CharacterBadge needs to know the original IDs
-  race?: Race; // This can be undefined if lookup failed
-  specialization?: Specialization; // This can be undefined if lookup failed
-}
 
 interface CharacterBadgeProps {
   character: Character;

@@ -1,44 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import CharacterBadge from "@/app/components/CharacterBadge";
 import { classMap } from "@/services/imageMaps/classIconMap";
-
-interface Faction {
-  id: number;
-  name: string;
-}
-
-interface Race {
-  id: number;
-  name: string;
-  slug: string;
-  faction: Faction;
-}
-
-interface Class {
-  id: number;
-  name: string;
-  slug: string;
-  colorCode: string;
-}
-
-interface Specialization {
-  id: number;
-  name: string;
-  slug: string;
-  class: Class;
-}
-
-interface Character {
-  id: number;
-  name: string;
-  level: number;
-  gender: "male" | "female";
-  note: string;
-  race: Race;
-  specialization: Specialization;
-}
+import Character from "@/services/Interfaces/Character";
+import Class from "@/services/Interfaces/Class";
+import Faction from "@/services/Interfaces/Faction";
+import { useEffect, useState } from "react";
 
 interface GroupedCharacters {
   [factionName: string]: {
@@ -83,24 +50,24 @@ export default function HomePage() {
 
   const groupCharacters = (characters: Character[]): GroupedCharacters => {
     return characters.reduce((acc, character) => {
-      const factionName = character.race.faction.name;
-      const className = character.specialization.class.name;
+      const factionName = character.race?.faction?.name;
+      const className = character.specialization?.class?.name;
 
-      if (!acc[factionName]) {
-        acc[factionName] = {
-          faction: character.race.faction,
+      if (!acc[factionName!]) {
+        acc[factionName!] = {
+          faction: character.race!.faction!,
           classes: {},
         };
       }
 
-      if (!acc[factionName].classes[className]) {
-        acc[factionName].classes[className] = {
-          class: character.specialization.class,
+      if (!acc[factionName!].classes[className!]) {
+        acc[factionName!].classes[className!] = {
+          class: character.specialization!.class!,
           characters: [],
         };
       }
 
-      acc[factionName].classes[className].characters.push(character);
+      acc[factionName!].classes[className!].characters.push(character);
       return acc;
     }, {} as GroupedCharacters);
   };

@@ -5,5 +5,5 @@ export default interface Race {
   name: string;
   slug: string;
   factionId: number;
-  faction: Faction;
+  faction?: Faction;
 }
