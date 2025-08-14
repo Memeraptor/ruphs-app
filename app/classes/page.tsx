@@ -3,7 +3,7 @@
 import { classMap } from "@/services/imageMaps/classIconMap";
 import Class from "@/services/Interfaces/Class";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export default function ClassesPage() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function ClassesPage() {
   });
 
   // Fetch classes from API
-  const fetchClasses = async () => {
+  const fetchClasses = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -41,11 +41,11 @@ export default function ClassesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
 
   useEffect(() => {
     fetchClasses();
-  }, [filters]);
+  }, [fetchClasses]);
 
   const handleFilterChange = (key: string, value: string | boolean) => {
     setFilters((prev) => ({
