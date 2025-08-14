@@ -4,7 +4,7 @@ import Class from "@/services/Interfaces/Class";
 import Faction from "@/services/Interfaces/Faction";
 import Race from "@/services/Interfaces/Race";
 import RaceClass from "@/services/Interfaces/RaceClass";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import RaceClassCard from "../components/RaceClassCard";
 import ClassBadge from "../components/ClassBadge";
 
@@ -25,15 +25,7 @@ export default function RaceClassesViewPage() {
   const [factions, setFactions] = useState<Faction[]>([]);
   const [deletingItems, setDeletingItems] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    fetchRaceClasses();
-  }, []);
-
-  useEffect(() => {
-    groupRaceClasses();
-  }, [raceClasses]);
-
-  const fetchRaceClasses = async () => {
+  const fetchRaceClasses = useCallback(async () => {
     setLoading(true);
     setError(null); // Clear any previous errors
     try {
@@ -50,9 +42,9 @@ export default function RaceClassesViewPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const groupRaceClasses = () => {
+  const groupRaceClasses = useCallback(() => {
     const grouped: GroupedRaceClasses = {};
     const factionsSet = new Set<string>();
 
@@ -86,7 +78,15 @@ export default function RaceClassesViewPage() {
       JSON.parse(f)
     );
     setFactions(uniqueFactions);
-  };
+  }, [raceClasses]);
+
+  useEffect(() => {
+    fetchRaceClasses();
+  }, [fetchRaceClasses]);
+
+  useEffect(() => {
+    groupRaceClasses();
+  }, [groupRaceClasses]);
 
   const filteredData = Object.values(groupedData)
     .filter((group) => {

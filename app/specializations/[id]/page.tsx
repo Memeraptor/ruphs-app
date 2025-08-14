@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { classMap } from "@/services/imageMaps/classIconMap";
 import Specialization from "@/services/Interfaces/Specialization";
@@ -27,11 +27,7 @@ export default function SpecializationPage() {
   });
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    fetchSpecialization();
-  }, [params.id]);
-
-  const fetchSpecialization = async () => {
+  const fetchSpecialization = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/specializations/${params.id}`);
@@ -52,7 +48,11 @@ export default function SpecializationPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchSpecialization();
+  }, [fetchSpecialization]);
 
   const handleEdit = () => {
     setEditMode(true);
