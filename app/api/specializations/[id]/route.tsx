@@ -4,6 +4,12 @@ import { CreateSpecializationSchema } from "../schema"; // Adjust path as needed
 
 const prisma = new PrismaClient();
 
+interface Partial {
+  name?: string;
+  slug?: string;
+  classId?: number;
+}
+
 // GET single specialization by ID
 export async function GET(
   request: NextRequest,
@@ -211,7 +217,7 @@ export async function PATCH(
     const body = await request.json();
 
     // For PATCH, we create a partial schema that allows optional fields
-    const partialData: any = {};
+    const partialData: Partial = {};
 
     if (body.name !== undefined) {
       partialData.name = body.name;

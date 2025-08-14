@@ -71,22 +71,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Utility function to generate a camelCase slug from a name
-function generateCamelCaseSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s]/g, "") // Remove special characters except spaces
-    .split(/\s+/) // Split by spaces
-    .map((word, index) => {
-      if (index === 0) return word; // First word stays lowercase
-      return word.charAt(0).toUpperCase() + word.slice(1); // Capitalize first letter of subsequent words
-    })
-    .join(""); // Join without separators
-}
-
 // Function to create multiple specializations for a single class
-export async function createMultipleSpecializations(data: any) {
+export async function createMultipleSpecializations(data: unknown) {
   try {
     // Validate the request data
     const validatedData = BulkCreateSpecializationSchema.parse(data);
@@ -120,7 +106,7 @@ export async function createMultipleSpecializations(data: any) {
       } catch (error) {
         // Skip if there's a unique constraint violation
         console.warn(
-          `Skipped creating specialization ${specData.name} due to conflict`
+          `Skipped creating specialization ${specData.name} due to conflict ${error}`
         );
       }
     }
