@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Race from "@/services/Interfaces/Race";
 import Class from "@/services/Interfaces/Class";
 
 interface BulkRaceClassFormProps {
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: unknown) => void;
   onError?: (error: string) => void;
 }
 
@@ -24,12 +24,7 @@ export default function BulkRaceClassForm({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Fetch races and classes on component mount
-  useEffect(() => {
-    fetchRacesAndClasses();
-  }, []);
-
-  const fetchRacesAndClasses = async () => {
+  const fetchRacesAndClasses = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch races
@@ -51,7 +46,12 @@ export default function BulkRaceClassForm({
     } finally {
       setLoading(false);
     }
-  };
+  }, [onError]);
+
+  // Fetch races and classes on component mount
+  useEffect(() => {
+    fetchRacesAndClasses();
+  }, [fetchRacesAndClasses]);
 
   const handleClassToggle = (classId: number) => {
     setSelectedClassIds((prev) =>
