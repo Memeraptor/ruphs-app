@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const includeFaction = searchParams.get("includeFaction") === "true";
     const includeClasses = searchParams.get("includeClasses") === "true";
     const includeCharacters = searchParams.get("includeCharacters") === "true";
     const factionId = searchParams.get("factionId");

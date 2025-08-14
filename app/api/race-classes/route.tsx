@@ -13,6 +13,25 @@ const bulkRaceClassSchema = z.object({
     .min(1, "At least one class must be selected"),
 });
 
+// Type for Prisma where clause
+interface WhereClause {
+  raceId?: number;
+  classId?: number;
+  race?: {
+    name?: {
+      contains: string;
+      mode: "insensitive";
+    };
+    factionId?: number;
+  };
+  class?: {
+    name: {
+      contains: string;
+      mode: "insensitive";
+    };
+  };
+}
+
 // GET /api/race-classes - Get all race-class relationships
 export async function GET(request: NextRequest) {
   try {
@@ -26,7 +45,7 @@ export async function GET(request: NextRequest) {
     const factionId = searchParams.get("factionId");
 
     // Build where clause based on query parameters
-    const whereClause: any = {};
+    const whereClause: WhereClause = {};
 
     if (raceId) {
       whereClause.raceId = parseInt(raceId);
@@ -218,7 +237,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Helper function to handle bulk creation
-async function handleBulkCreate(body: any) {
+async function handleBulkCreate(body: unknown) {
   try {
     // Validate the request body using bulk schema
     const validatedData = bulkRaceClassSchema.parse(body);
