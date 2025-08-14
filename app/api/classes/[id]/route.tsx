@@ -7,10 +7,11 @@ const prisma = new PrismaClient();
 // GET /api/classes/[id] - Get a specific class by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const classId = parseInt(params.id);
+    const { id } = await params;
+    const classId = parseInt(id);
 
     // Validate ID parameter
     if (isNaN(classId) || classId <= 0) {
@@ -74,10 +75,11 @@ export async function GET(
 // PUT /api/classes/[id] - Update a specific class by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const classId = parseInt(params.id);
+    const { id } = await params;
+    const classId = parseInt(id);
 
     // Validate ID parameter
     if (isNaN(classId) || classId <= 0) {
@@ -196,10 +198,11 @@ export async function PUT(
 // DELETE /api/classes/[id] - Delete a specific class by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const classId = parseInt(params.id);
+    const { id } = await params;
+    const classId = parseInt(id);
 
     // Validate ID parameter
     if (isNaN(classId) || classId <= 0) {
