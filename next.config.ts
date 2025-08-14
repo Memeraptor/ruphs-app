@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "warcraft.wiki.gg",
       },
+      {
+        protocol: "https",
+        hostname: "at-cdn-s03.audiotool.com",
+      },
     ],
   },
 };

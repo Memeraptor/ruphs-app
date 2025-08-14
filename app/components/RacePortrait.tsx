@@ -1,6 +1,7 @@
 import Race from "@/services/Interfaces/Race";
 import React from "react";
 import { raceImages } from "@/services/imageMaps/racePortraitMap";
+import Image from "next/image";
 
 interface Props {
   race: Race;
@@ -10,7 +11,9 @@ const RacePortrait = ({ race }: Props) => {
   return (
     <div className="flex-shrink-0">
       {(raceImages as Record<string, string>)[race.slug] ? (
-        <img
+        <Image
+          height={120}
+          width={120}
           src={(raceImages as Record<string, string>)[race.slug]}
           alt={`${race.name} icon`}
           className={`w-15 h-15 object-contain rounded-lg p-0.5 ${

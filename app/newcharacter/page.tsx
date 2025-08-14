@@ -8,6 +8,7 @@ import Class from "@/services/Interfaces/Class";
 import Race from "@/services/Interfaces/Race";
 import Specialization from "@/services/Interfaces/Specialization";
 import Character from "@/services/Interfaces/Character";
+import RaceClass from "@/services/Interfaces/RaceClass";
 
 // --- INTERFACE DEFINITIONS ---
 
@@ -181,8 +182,7 @@ const CharacterForm = () => {
       const raceClassCombinations = await raceClassResponse.json();
 
       const availableClassIds = raceClassCombinations.map(
-        (combination: any) =>
-          combination.classId || combination.class_id || combination.id
+        (combination: RaceClass) => combination.classId
       );
 
       const availableClasses = fetchedAllClasses.filter((cls: Class) =>
