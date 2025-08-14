@@ -4,17 +4,18 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     raceId: string;
     classId: string;
-  };
+  }>;
 }
 
 // GET /api/race-classes/[raceId]/[classId]
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const raceId = parseInt(params.raceId);
-    const classId = parseInt(params.classId);
+    const { raceId: raceIdParam, classId: classIdParam } = await params;
+    const raceId = parseInt(raceIdParam);
+    const classId = parseInt(classIdParam);
 
     // Validate that IDs are valid numbers
     if (isNaN(raceId) || isNaN(classId)) {
@@ -62,8 +63,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // DELETE /api/race-classes/[raceId]/[classId]
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const raceId = parseInt(params.raceId);
-    const classId = parseInt(params.classId);
+    const { raceId: raceIdParam, classId: classIdParam } = await params;
+    const raceId = parseInt(raceIdParam);
+    const classId = parseInt(classIdParam);
 
     // Validate that IDs are valid numbers
     if (isNaN(raceId) || isNaN(classId)) {
