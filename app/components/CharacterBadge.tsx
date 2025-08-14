@@ -1,6 +1,7 @@
 import { genderImages } from "@/services/imageMaps/genderPortraitsMap";
 import { specMap } from "@/services/imageMaps/specializationIconMap";
 import Character from "@/services/Interfaces/Character";
+import Image from "next/image";
 
 // Make 'race' and 'specialization' optional, and match the 'id' fields from the API
 
@@ -28,7 +29,7 @@ export default function CharacterBadge({ character }: CharacterBadgeProps) {
     }
   };
 
-  const getSpecializationImage = (char: Character) => {
+  const getSpecializationImage = () => {
     try {
       return specMap[specializationSlug] || "/placeholder-spec.png";
     } catch {
@@ -41,7 +42,9 @@ export default function CharacterBadge({ character }: CharacterBadgeProps) {
       <div className="flex items-center space-x-2">
         {/* Portrait Image */}
         <div className="flex-shrink-0">
-          <img
+          <Image
+            width={120}
+            height={120}
             src={getPortraitImage(character)}
             alt={`${raceName} ${character.gender}`}
             className="w-8 h-8 rounded-full object-cover border border-base-300"
@@ -63,8 +66,10 @@ export default function CharacterBadge({ character }: CharacterBadgeProps) {
 
         {/* Specialization Icon */}
         <div className="flex-shrink-0">
-          <img
-            src={getSpecializationImage(character)}
+          <Image
+            src={getSpecializationImage()}
+            width={120}
+            height={120}
             alt={specializationName}
             className="w-6 h-6 object-contain"
             onError={(e) => {
