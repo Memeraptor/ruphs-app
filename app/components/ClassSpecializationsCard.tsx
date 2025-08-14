@@ -3,6 +3,7 @@ import { classMap } from "../../services/imageMaps/classIconMap";
 import { specMap } from "@/services/imageMaps/specializationIconMap";
 import Class from "@/services/Interfaces/Class";
 import Specialization from "@/services/Interfaces/Specialization";
+import Image from "next/image";
 
 interface ClassSpecializationsCardProps {
   className: string;
@@ -83,8 +84,11 @@ export default function ClassSpecializationsCard({
                   backgroundColor: classData.colorCode || "#6B7280",
                 }}
               /> */}
-              <img
+              <Image
                 src={specMap[specialization.slug]}
+                height={1}
+                width={1}
+                alt={`${specialization.name}`}
                 className="w-6 h-6 rounded-full"
               />
               <Link href={`/specializations/${specialization.id}`}>
