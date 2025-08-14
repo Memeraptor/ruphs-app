@@ -7,10 +7,11 @@ const prisma = new PrismaClient();
 // GET /api/races/[id] - Get a specific race by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const raceId = parseInt(params.id);
+    const { id } = await params;
+    const raceId = parseInt(id);
 
     // Validate ID parameter
     if (isNaN(raceId) || raceId <= 0) {
@@ -75,10 +76,11 @@ export async function GET(
 // PUT /api/races/[id] - Update a specific race by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const raceId = parseInt(params.id);
+    const { id } = await params;
+    const raceId = parseInt(id);
 
     // Validate ID parameter
     if (isNaN(raceId) || raceId <= 0) {
@@ -218,10 +220,11 @@ export async function PUT(
 // DELETE /api/races/[id] - Delete a specific race by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const raceId = parseInt(params.id);
+    const { id } = await params;
+    const raceId = parseInt(id);
 
     // Validate ID parameter
     if (isNaN(raceId) || raceId <= 0) {
