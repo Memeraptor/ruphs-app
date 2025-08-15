@@ -71,8 +71,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Function to create multiple specializations for a single class
-export async function createMultipleSpecializations(data: unknown) {
+// Helper function - NOT EXPORTED (this was the issue!)
+async function createMultipleSpecializations(data: unknown) {
   try {
     // Validate the request data
     const validatedData = BulkCreateSpecializationSchema.parse(data);
