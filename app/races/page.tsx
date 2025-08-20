@@ -135,7 +135,7 @@ function RacesList() {
                               : "badge badge-error"
                           }
                         >
-                          {race.faction.name}
+                          {race.faction ? race.faction.name : "no faction"}
                         </div>
                       </h2>
                       <div className="space-y-2">

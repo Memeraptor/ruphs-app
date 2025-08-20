@@ -5,15 +5,7 @@ import { useRouter } from "next/navigation";
 import Race from "@/services/Interfaces/Race";
 import Class from "@/services/Interfaces/Class";
 
-interface BulkRaceClassFormProps {
-  onSuccess?: (data: unknown) => void;
-  onError?: (error: string) => void;
-}
-
-export default function BulkRaceClassForm({
-  onSuccess,
-  onError,
-}: BulkRaceClassFormProps) {
+export default function BulkRaceClassForm() {
   const router = useRouter();
   const [races, setRaces] = useState<Race[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
@@ -42,11 +34,10 @@ export default function BulkRaceClassForm({
       const errorMessage =
         err instanceof Error ? err.message : "Failed to load data";
       setError(errorMessage);
-      onError?.(errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [onError]);
+  }, []);
 
   // Fetch races and classes on component mount
   useEffect(() => {
@@ -107,7 +98,6 @@ export default function BulkRaceClassForm({
       const successMessage =
         data.message || "Race-class relationships created successfully";
       setSuccess(successMessage);
-      onSuccess?.(data);
 
       // Reset form
       setSelectedRaceId(null);
@@ -121,7 +111,6 @@ export default function BulkRaceClassForm({
       const errorMessage =
         err instanceof Error ? err.message : "Failed to create relationships";
       setError(errorMessage);
-      onError?.(errorMessage);
     } finally {
       setSubmitting(false);
     }
