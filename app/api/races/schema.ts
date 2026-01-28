@@ -12,10 +12,6 @@ export const raceSchema = z.object({
     .string()
     .min(1, "Race slug is required")
     .max(255, "Race slug must be less than 255 characters")
-    .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      "Slug must be lowercase letters, numbers, and hyphens only"
-    )
     .trim(),
 
   factionId: z
@@ -37,10 +33,6 @@ export const raceUpdateSchema = z.object({
     .string()
     .min(1, "Race slug is required")
     .max(255, "Race slug must be less than 255 characters")
-    .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      "Slug must be lowercase letters, numbers, and hyphens only"
-    )
     .trim()
     .optional(),
 

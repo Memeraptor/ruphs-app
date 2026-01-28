@@ -203,7 +203,7 @@ export default function ClassesPage() {
                   onChange={(e) =>
                     handleFilterChange(
                       "includeSpecializations",
-                      e.target.checked
+                      e.target.checked,
                     )
                   }
                 />
@@ -264,7 +264,7 @@ export default function ClassesPage() {
                 <div className="mb-4">
                   <div
                     className={`badge ${getArmorTypeBadgeColor(
-                      playerClass.armorType
+                      playerClass.armorType,
                     )} gap-2`}
                   >
                     {playerClass.armorType}
@@ -315,9 +315,9 @@ export default function ClassesPage() {
 
                 {/* Actions */}
                 <div className="card-actions justify-end mt-4">
-                  <button className="btn btn-primary btn-sm">
+                  {/* <button className="btn btn-primary btn-sm">
                     View Details
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
@@ -369,7 +369,7 @@ export default function ClassesPage() {
             <div className="stat-value">
               {classes.reduce(
                 (acc, c) => acc + (c.specializations?.length || 0),
-                0
+                0,
               )}
             </div>
             <div className="stat-desc">Total specializations</div>

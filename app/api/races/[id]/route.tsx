@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 // GET /api/races/[id] - Get a specific race by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -21,7 +21,7 @@ export async function GET(
           error: "Invalid race ID",
           message: "Race ID must be a positive integer",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -52,7 +52,7 @@ export async function GET(
           error: "Race not found",
           message: `Race with ID ${raceId} does not exist`,
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -68,7 +68,7 @@ export async function GET(
         error: "Failed to fetch race",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -76,7 +76,7 @@ export async function GET(
 // PUT /api/races/[id] - Update a specific race by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -90,7 +90,7 @@ export async function PUT(
           error: "Invalid race ID",
           message: "Race ID must be a positive integer",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -111,7 +111,7 @@ export async function PUT(
           error: "Race not found",
           message: `Race with ID ${raceId} does not exist`,
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -141,7 +141,7 @@ export async function PUT(
                 ? "A race with this name already exists"
                 : "A race with this slug already exists",
           },
-          { status: 409 }
+          { status: 409 },
         );
       }
     }
@@ -159,7 +159,7 @@ export async function PUT(
             error: "Invalid faction",
             message: "The specified faction does not exist",
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
@@ -190,7 +190,7 @@ export async function PUT(
           message: "Invalid input data",
           details: error.message,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -202,7 +202,7 @@ export async function PUT(
           error: "Duplicate entry",
           message: "Race with this name or slug already exists",
         },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -212,7 +212,7 @@ export async function PUT(
         error: "Failed to update race",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -220,7 +220,7 @@ export async function PUT(
 // DELETE /api/races/[id] - Delete a specific race by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -234,7 +234,7 @@ export async function DELETE(
           error: "Invalid race ID",
           message: "Race ID must be a positive integer",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -254,7 +254,7 @@ export async function DELETE(
           error: "Race not found",
           message: `Race with ID ${raceId} does not exist`,
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -266,7 +266,7 @@ export async function DELETE(
           error: "Cannot delete race",
           message: `Cannot delete race because it has ${existingRace.characters.length} associated character(s)`,
         },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -298,7 +298,7 @@ export async function DELETE(
           error: "Cannot delete race",
           message: "Cannot delete race because it has associated records",
         },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -308,7 +308,7 @@ export async function DELETE(
         error: "Failed to delete race",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

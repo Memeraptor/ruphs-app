@@ -17,7 +17,7 @@ const RacePortrait = ({ race }: Props) => {
           src={(raceImages as Record<string, string>)[race.slug]}
           alt={`${race.name} icon`}
           className={`w-15 h-15 object-contain rounded-lg p-0.5 ${
-            race.factionId === 1 ? `bg-info` : `bg-error`
+            race.factionId === 1 ? `bg-blue-700` : `bg-red-700`
           }`}
         />
       ) : (

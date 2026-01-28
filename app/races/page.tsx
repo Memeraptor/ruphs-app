@@ -62,7 +62,7 @@ function RacesList() {
     } catch (err) {
       alert(
         "Error deleting race: " +
-          (err instanceof Error ? err.message : "Unknown error")
+          (err instanceof Error ? err.message : "Unknown error"),
       );
     }
   };
@@ -154,7 +154,7 @@ function RacesList() {
                   {/* Action Buttons */}
                   <div className="card-actions">
                     <Link
-                      href={`/races/${race.id}/edit`}
+                      href={`/races/${race.id}`}
                       className="btn btn-primary btn-sm"
                     >
                       <svg
