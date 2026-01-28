@@ -131,8 +131,8 @@ function RacesList() {
                         <div
                           className={
                             race.factionId === 1
-                              ? "badge badge-info"
-                              : "badge badge-error"
+                              ? "badge bg-blue-700"
+                              : "badge bg-red-700"
                           }
                         >
                           {race.faction ? race.faction.name : "no faction"}

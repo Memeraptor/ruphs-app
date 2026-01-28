@@ -96,7 +96,7 @@ export default function EditRacePage() {
           return;
         }
         const data = await response.json();
-        setFactions(data.data || []);
+        setFactions(data);
       } catch (err) {
         console.error("Error fetching factions:", err);
       }
@@ -234,16 +234,20 @@ export default function EditRacePage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           {/* Left Column - Portrait with Faction Background */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 flex flex-col">
             {(() => {
               const factionImage = race.faction?.name
                 ? getFactionImage(race.faction.name)
                 : null;
+              const gradientColor =
+                race.factionId === 1
+                  ? "bg-gradient-to-b from-blue-900/40 via-blue-700/30 to-blue-900/40"
+                  : "bg-gradient-to-b from-red-900/40 via-red-700/30 to-red-900/40";
 
               return (
-                <div className="bg-gray-800 rounded-lg p-6 sticky top-8 relative overflow-hidden min-h-[500px] flex items-center">
+                <div className="bg-gray-800 rounded-lg p-6 sticky top-8 relative overflow-hidden w-full flex-1 flex items-center">
                   {/* Faction Background Image */}
                   {factionImage && (
                     <div
@@ -252,8 +256,10 @@ export default function EditRacePage() {
                     />
                   )}
 
-                  {/* Dark overlay for better text readability */}
-                  <div className="absolute inset-0 bg-black/40 rounded-lg"></div>
+                  {/* Dynamic gradient color film effect */}
+                  <div
+                    className={`absolute inset-0 ${gradientColor} rounded-lg`}
+                  ></div>
 
                   <div className="relative z-10 flex flex-col items-center w-full">
                     <p className="text-2xl font-bold text-white mb-6">
@@ -275,10 +281,10 @@ export default function EditRacePage() {
           </div>
 
           {/* Right Column - Form */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 flex flex-col">
             <form
               onSubmit={handleSubmit}
-              className="bg-gray-800 rounded-lg p-6"
+              className="bg-gray-800 rounded-lg p-6 flex-1 flex flex-col"
             >
               <h2 className="text-2xl font-bold text-white mb-6">
                 Edit Race Information
@@ -340,7 +346,7 @@ export default function EditRacePage() {
 
               {/* Available Classes Display */}
               {race.classes && race.classes.length > 0 && (
-                <div className="mb-6">
+                <div className="mb-6 flex-1">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Available Classes
                   </label>
