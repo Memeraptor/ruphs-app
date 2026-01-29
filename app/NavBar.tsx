@@ -1,9 +1,11 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const { status, data: session } = useSession();
   const pathname = usePathname();
 
   const isActive = (path: string) => {
@@ -68,7 +70,7 @@ export default function Navbar() {
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost text-xl">
-          Fruit-Burglar App
+          Ruph's App
         </Link>
       </div>
 
@@ -118,27 +120,33 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-end">
-        <div className="dropdown dropdown-end">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
+        {status === "unauthenticated" && (
+          <button
+            className="btn btn-primary btn-md"
+            onClick={() => (window.location.href = "/api/auth/signin")}
           >
-            <div className="w-10 rounded-full">
-              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-primary-content font-bold">U</span>
+            Login
+          </button>
+        )}
+        {status === "authenticated" && (
+          <div className="dropdown dropdown-end">
+            <div tabIndex={0} role="button" className="btn btn-ghost">
+              <div className="rounded-full">
+                <div className="bg-primary flex items-center justify-center p-3 rounded-2xl">
+                  <span className="text-primary-content font-bold">
+                    {session?.user?.name}
+                  </span>
+                </div>
               </div>
             </div>
+            <ul
+              tabIndex={0}
+              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+            >
+              <Link href="/api/auth/signout">Logout</Link>
+            </ul>
           </div>
-          <ul
-            tabIndex={0}
-            className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <a>Logout</a>
-            </li>
-          </ul>
-        </div>
+        )}
       </div>
     </div>
   );
