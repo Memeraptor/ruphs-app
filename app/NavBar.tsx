@@ -98,22 +98,22 @@ export default function Navbar() {
           </li>
           <li>
             <Link
-              href="/race-classes"
-              className={`btn btn-ghost ${
-                isActive("/race-classes") ? "btn-active" : ""
-              }`}
-            >
-              Race Classes
-            </Link>
-          </li>
-          <li>
-            <Link
               href="/specializations"
               className={`btn btn-ghost ${
                 isActive("/specializations") ? "btn-active" : ""
               }`}
             >
               Specializations
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/race-classes"
+              className={`btn btn-ghost ${
+                isActive("/race-classes") ? "btn-active" : ""
+              }`}
+            >
+              Race Classes
             </Link>
           </li>
         </ul>
