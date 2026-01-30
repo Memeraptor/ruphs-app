@@ -66,5 +66,4 @@ export const authOptions: NextAuthOptions = {
       return WHITELIST.includes(user.email.toLowerCase());
     },
   },
-  debug: true,
 };
