@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SignInButton from "./components/SignInButton";
 
 export default function Navbar() {
   const { status, data: session } = useSession();
@@ -120,14 +121,7 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-end">
-        {status === "unauthenticated" && (
-          <button
-            className="btn btn-primary btn-md"
-            onClick={() => (window.location.href = "/api/auth/signin")}
-          >
-            Login
-          </button>
-        )}
+        {status === "unauthenticated" && <SignInButton />}
         {status === "authenticated" && (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost">

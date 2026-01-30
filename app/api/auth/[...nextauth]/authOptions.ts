@@ -65,5 +65,13 @@ export const authOptions: NextAuthOptions = {
       if (!user.email) return false;
       return WHITELIST.includes(user.email.toLowerCase());
     },
+    async redirect({ url, baseUrl }) {
+      // If the URL is a relative path, allow it
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // If the callback URL is on the same origin, allow it
+      if (new URL(url).origin === baseUrl) return url;
+      // Otherwise redirect to home
+      return baseUrl;
+    },
   },
 };
