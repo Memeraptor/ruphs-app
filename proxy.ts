@@ -1,4 +1,6 @@
 export { default } from "next-auth/middleware";
+import type { NextRequest } from "next/server";
+//import { isAuthenticated } from "@lib/auth";
 
 export const config = {
   matcher: [
@@ -12,3 +14,5 @@ export const config = {
     "/characters/:id",
   ],
 };
+
+export function proxy(request: NextRequest) {}
