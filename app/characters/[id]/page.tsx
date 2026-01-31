@@ -229,7 +229,7 @@ export default function CharacterPage() {
     try {
       const res = await fetch(`/api/characters/${id}`, { method: "DELETE" });
       if (res.ok) {
-        router.push("/characters");
+        router.push("/");
       } else {
         const errBody = await res.json().catch(() => ({}));
         setError(errBody.message || "Failed to delete character");
