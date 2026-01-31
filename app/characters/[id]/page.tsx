@@ -8,25 +8,8 @@ import { specMap } from "@/services/imageMaps/specializationIconMap";
 import Character from "@/services/Interfaces/Character";
 import Faction from "@/services/Interfaces/Faction";
 import Race from "@/services/Interfaces/Race";
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-interface Specialization {
-  id: number;
-  name: string;
-  slug: string;
-  classId: number;
-  class?: { id: number; name: string; slug?: string };
-}
-
-interface RaceClass {
-  id: number;
-  raceId: number;
-  classId: number;
-  race: Race;
-}
+import Specialization from "@/services/Interfaces/Specialization";
+import RaceClass from "@/services/Interfaces/RaceClass";
 
 // ---------------------------------------------------------------------------
 // Page component
