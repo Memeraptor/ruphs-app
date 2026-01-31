@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
         error: "Failed to fetch characters",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
           error: "Character already exists",
           message: "A character with this name already exists",
         },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
           error: "Invalid race",
           message: "The specified race does not exist",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
           error: "Invalid specialization",
           message: "The specified specialization does not exist",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -143,7 +143,7 @@ export async function POST(request: NextRequest) {
         data: newCharacter,
         message: "Character created successfully",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Error creating character:", error);
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
           message: "Invalid input data",
           details: error.message,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
           error: "Duplicate entry",
           message: "Character with this name already exists",
         },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -179,7 +179,7 @@ export async function POST(request: NextRequest) {
         error: "Failed to create character",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
