@@ -71,7 +71,7 @@ export default function Navbar() {
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost text-xl">
-          Ruph's App
+          Ruphs App
         </Link>
       </div>
 

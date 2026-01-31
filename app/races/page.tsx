@@ -17,7 +17,7 @@ function RacesLoading() {
 }
 
 function RacesList() {
-  const { status, data: session } = useSession();
+  const { status } = useSession();
   const [races, setRaces] = useState<Race[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
