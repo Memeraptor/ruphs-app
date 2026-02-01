@@ -1,29 +1,14 @@
-// src/proxy.ts or /proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// This function can be marked `async` if using `await` inside
 export function proxy(request: NextRequest) {
-  // Example: Redirect a user if a certain cookie is missing
-  if (!request.cookies.has("authenticated")) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  // Example: Add a custom header to the request
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-custom-header", "hello");
-
-  // You can also rewrite the URL (URL proxy)
-  // return NextResponse.rewrite(new URL('/home', request.url));
-
-  // Or proceed with the request as normal, optionally modifying headers
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  return NextResponse.redirect(new URL("/home", request.url));
 }
 
-// Configuration to specify which paths the proxy applies to
+// Alternatively, you can use a default export:
+// export default function proxy(request: NextRequest) { ... }
+
 export const config = {
   matcher: [
     "/newcharacter",
