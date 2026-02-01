@@ -1,11 +1,17 @@
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { authOptions } from "./app/api/auth/[...nextauth]/authOptions";
 
 // This function can be marked `async` if using `await` inside
-export function proxy(request: NextRequest) {
-  return NextResponse.redirect(
-    new URL("/api/auth/signin?callbackUrl=%2F", request.url),
-  );
+export async function proxy(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.redirect(
+      new URL("/api/auth/signin?callbackUrl=%2F", request.url),
+    );
+  }
 }
 
 // Alternatively, you can use a default export:
